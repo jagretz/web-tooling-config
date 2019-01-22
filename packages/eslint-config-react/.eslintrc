@@ -1,0 +1,6 @@
+{
+    "extends": [
+        "@jagretz/eslint-config-base",
+        "./eslint-react.js"
+    ]
+}
