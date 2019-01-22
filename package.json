@@ -1,0 +1,24 @@
+{
+    "name": "@jagretz/web-configs",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:jagretz/web-configs.git"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org"
+    },
+    "scripts": {},
+    "keywords": [
+        "lerna",
+        "eslint",
+        "stylelint",
+        "prettier",
+        "editorconfig"
+    ],
+    "dependencies": {},
+    "devDependencies": {
+        "lerna": "^3.10.6"
+    }
+}
