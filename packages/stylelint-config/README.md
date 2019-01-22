@@ -1,0 +1,3 @@
+# `stylelint-config`
+
+> TODO: description
