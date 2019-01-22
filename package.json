@@ -1,13 +1,15 @@
 {
     "name": "@jagretz/web-configs",
-    "private": true,
+    "description": "A monorepo of linter and formatter configurations for browser-based web projects",
+    "author": "jagretz <jagretz@gmail.com>",
+    "private": false,
     "repository": {
         "type": "git",
         "url": "git@github.com:jagretz/web-configs.git"
     },
     "publishConfig": {
         "access": "public",
-        "registry": "https://registry.npmjs.org"
+        "registry": "https://registry.npmjs.org/"
     },
     "scripts": {},
     "keywords": [
