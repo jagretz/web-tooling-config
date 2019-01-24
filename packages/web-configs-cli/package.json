@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
-    "enquirer": "^2.3.0"
+    "enquirer": "^2.3.0",
+    "shell.js": "^3.1.0"
   }
 }
