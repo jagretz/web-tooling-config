@@ -1,5 +1,5 @@
-const chalk = require("chalk")
-const path = require("path")
+const chalk = require("chalk");
+const path = require("path");
 
 /**
  * Delegates to the `console.log` after formatting and colorizing the message.
@@ -7,7 +7,7 @@ const path = require("path")
  * @param {func} colorizer - a color method on `chalk`. ie `chalk.red`
  * @param {...} rest - values to log to the console
  */
-const log = (colorizer, ...rest) =>
+const log = colorizer => (...rest) =>
     console.log(
         chalk.gray("web-configs |"),
         ...rest
@@ -23,7 +23,8 @@ const log = (colorizer, ...rest) =>
     );
 
 module.exports = {
-    error: log.bind(null, chalk.red),
-    success: log.bind(null, chalk.green),
-    warn: log.bind(null, chalk.yellow)
-}
+    log: log(chalk.white),
+    error: log(chalk.red),
+    success: log(chalk.green),
+    warn: log(chalk.yellow)
+};
