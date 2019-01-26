@@ -6,6 +6,7 @@ const { promisify } = require("util");
 const { exec, spawn } = require("child_process");
 /** @see [enquirer]{@link https://www.npmjs.com/package/enquirer} */
 const { prompt } = require("enquirer");
+const chalk = require("chalk");
 /* custom modules / non-node modules */
 const logger = require("./colorLog");
 
@@ -43,8 +44,13 @@ async function asyncStat() {
         } else {
             console.error("Problem detected:\n", error);
         }
-        return null;
+        process.exit();
+        // return null;
     }
+}
+
+function welcomeMessage() {
+    logger.log("Let's configure that app 😉");
 }
 
 const questions = [
@@ -65,22 +71,77 @@ const questions = [
     }
 ];
 
-async function run() {
-    asyncStat();
-    welcomeMessage();
-    const response = ask(questions);
-    console.log("response :", response);
+const calculatelongestText = texts =>
+    Object.values(texts).reduce((longest, current) =>
+        current.length > longest ? current : longest
+    );
+
+// const ProjectType = Object.freeze({ BROWSER: "browser", REACT: "react", NODE: "node" });
+// const longest = calculatelongestText(ProjectType).length;
+const BROWSER = "browser";
+const REACT = "react";
+const NODE = "node";
+
+const longest = calculatelongestText([BROWSER, REACT, NODE]).length;
+
+function formatHint(longest) {
+    return (name, hint) => {
+        return `${hint.padStart(hint.length + longest - name.length)}`;
+    };
+}
+const padHint = formatHint(longest);
+
+const projectQuestions = {
+    type: "select",
+    name: "type",
+    message: "What type of project do you want to configure?",
+    choices: [
+        {
+            name: BROWSER,
+            message: `${BROWSER}?`,
+            hint: chalk.gray(padHint(BROWSER, "(plain old javascript apps)"))
+        },
+        {
+            name: REACT,
+            message: `${REACT}?`,
+            hint: chalk.gray(padHint(REACT, "(create-react-app)"))
+        },
+        {
+            name: NODE,
+            message: `${NODE}?`,
+            hint: chalk.gray(padHint(NODE, "(node cli, scripts, native apps)"))
+        }
+    ]
+};
+
+function selectProjectType(type) {
+    switch (type) {
+        case REACT: {
+            console.log("Project is react!!!");
+            return;
+        }
+        case NODE: {
+            console.log("Project is node!!!");
+            return;
+        }
+        default:
+        case BROWSER: {
+            console.log("Project is browser!!!");
+            return;
+        }
+    }
 }
 
-async function ask(questions) {
-    return await prompt(questions);
+async function run() {
+    await asyncStat();
+    welcomeMessage();
+    const project = await prompt(projectQuestions);
+    selectProjectType(project.type);
+
+    console.log("project :", project);
 }
 
 run();
-
-function welcomeMessage() {
-    console.log(logger.log("Let's configure that app 😉"));
-}
 
 // todo
 /*
@@ -95,4 +156,23 @@ Other
 - ensure it runs on windows
 - handle errors
 - prompt user before install
+*/
+/*
+Files to copy & overwrite
+- configs
+    - prettier
+    - stylelint
+    - editorconfig
+    - eslint (which one???)
+        - pojo - browser / base
+        - react - browser
+        - node
+    - eslint overrides (empty file)
+        ! This should only copy over _if_ there isn't already an overrides file
+    - stylelint overrides (empty file)
+        ! This should only copy over _if_ there isn't already an overrides file
+    - gitignore
+    - eslintignore
+    - stylintignore
+    - prettierignore
 */
