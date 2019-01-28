@@ -2,8 +2,8 @@ const fs = require("fs");
 const path = require("path");
 /** @see [promisify]{@link https://nodejs.org/dist/latest-v8.x/docs/api/util.html#util_util_promisify_original} */
 const { promisify } = require("util");
-/** @see [child_process]{@link https://nodejs.org/api/child_process.html#child_process_child_process} */
-const { exec, spawn } = require("child_process");
+// /** @see [child_process]{@link https://nodejs.org/api/child_process.html#child_process_child_process} */
+// const { exec, spawn } = require("child_process");
 /** @see [enquirer]{@link https://www.npmjs.com/package/enquirer} */
 const { prompt } = require("enquirer");
 const chalk = require("chalk");
@@ -13,7 +13,10 @@ const logger = require("./colorLog");
 const cwd = process.cwd();
 
 const readFile = promisify(fs.readFile);
-// @see https://nodejs.org/api/fs.html#fs_fs_write_fd_string_position_encoding_callback
+/**
+ * @see https://nodejs.org/api/fs.html#fs_fs_write_fd_string_position_encoding_callback
+ * @see [File System Flags]{@link https://nodejs.org/api/fs.html#fs_file_system_flags}
+ */
 const writeFile = promisify(fs.writeFile);
 
 /**
@@ -21,7 +24,7 @@ const writeFile = promisify(fs.writeFile);
  * @see [Stats object] {@link https://nodejs.org/api/fs.html#fs_class_fs_stats}
  */
 const statPromise = promisify(fs.stat);
-const execCmd = promisify(exec);
+// const execCmd = promisify(exec);
 
 // testing async/await with promisify-ied `fs.stat`
 async function asyncStat() {
@@ -115,9 +118,11 @@ const projectQuestions = {
 };
 
 function selectProjectType(type) {
+    console.log(`Setting up project with the ${chalk.underline(type)} configs`);
+
     switch (type) {
         case REACT: {
-            console.log("Project is react!!!");
+            console.log(`Project react configs.`);
             return;
         }
         case NODE: {
@@ -132,28 +137,85 @@ function selectProjectType(type) {
     }
 }
 
+const target = filename => path.join(__dirname, "templates", filename);
+const destination = filename => path.join(cwd, filename);
+const file = "foo";
+const configFiles = ["foo", "bar", ".foobar", "tar"];
+
+async function safeReadFile(filename) {
+    const pathname = path.join("templates", filename);
+    try {
+        return await readFile(pathname);
+    } catch (error) {
+        if (error.code === "ENOENT") {
+            console.log("path.dirname", path.dirname(pathname));
+            console.log("path.basename", path.basename(pathname));
+            logger.warn(`No such file "${filename}" or directory "${pathname}". Skipping file.`);
+            return true;
+        } else {
+            logger.error(`Could not read file "${filename}" from path ${"the pathname goes here"}`);
+            throw error;
+        }
+    }
+}
+
+async function safeWriteFile(filename, ...rest) {
+    try {
+        return await writeFile(destination(filename), ...rest);
+    } catch (error) {
+        if (error.code === "EEXIST") {
+            logger.log("Skipped");
+            return true;
+        } else {
+            logger.error(`Could not write file "${filename}" to desitination `);
+            throw error;
+        }
+    }
+}
+
+async function copyFiles(filenames) {
+    return await filenames.map(async filename => {
+        logger.log(`Processing ${chalk.cyan(filename)}`);
+        const file = await safeReadFile(filename);
+
+        await safeWriteFile(filename, file, { flag: "w" });
+        logger.log(`Copied ${chalk.cyan(filename)}`);
+    });
+}
+
 async function run() {
+    // console.log("cwd", cwd); // The dir where the script is invoked
+    // console.log("__dirname", __dirname); // The dir where the (invoked) script is defined
+
     await asyncStat();
     welcomeMessage();
     const project = await prompt(projectQuestions);
     selectProjectType(project.type);
-
     console.log("project :", project);
+
+    /* copy (raed/write) all files */
+    await copyFiles(configFiles);
+    console.log("Copy ALL files success");
 }
 
 run();
 
-// todo
 /*
+todo
+
 - [x] start the cli...
 - [x] Ensure a clean git directory. This will be used as a "backup".
-- read in files from dev dependencies
-    - try just reading in a single file for now
-    - ignore non-essential deps
-- copy files into repository (install dir)
+- [x] read in files from local directory
+- [x] try just reading in a single file for now
+- [x] copy files into repository (install dir)
 
-Other
-- ensure it runs on windows
+Hmmmm?
+- [ ] ? pull in files from dev dependencies?
+
+After functionality is implemented:
+
+- ensure it runs on windows (POSIX)
+- ensure it runs on osx
 - handle errors
 - prompt user before install
 */
