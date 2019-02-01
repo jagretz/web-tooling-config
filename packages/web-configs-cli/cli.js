@@ -8,7 +8,7 @@ const { promisify } = require("util");
 const { prompt } = require("enquirer");
 const chalk = require("chalk");
 /* custom modules / non-node modules */
-const logger = require("./colorLog");
+const logger = require("./src/colorLog");
 
 const cwd = process.cwd();
 
@@ -137,23 +137,26 @@ function selectProjectType(type) {
     }
 }
 
-const target = filename => path.join(__dirname, "templates", filename);
+// const target = filename => path.join(__dirname, "templates", filename);
 const destination = filename => path.join(cwd, filename);
-const file = "foo";
-const configFiles = ["foo", "bar", ".foobar", "tar"];
+
+const { testFiles } = require("./src/sources");
 
 async function safeReadFile(filename) {
+    const dir = path.join(__dirname, "templates");
     const pathname = path.join("templates", filename);
     try {
         return await readFile(pathname);
     } catch (error) {
         if (error.code === "ENOENT") {
+            // prints path.dirname templates
             console.log("path.dirname", path.dirname(pathname));
+            // prints path.basename tar
             console.log("path.basename", path.basename(pathname));
-            logger.warn(`No such file "${filename}" or directory "${pathname}". Skipping file.`);
+            logger.warn(`No such file "${filename}" in directory "${dir}". Skipping file.`);
             return true;
         } else {
-            logger.error(`Could not read file "${filename}" from path ${"the pathname goes here"}`);
+            logger.error(`Could not read file "${filename}" from path ${dir}`);
             throw error;
         }
     }
@@ -194,7 +197,7 @@ async function run() {
     console.log("project :", project);
 
     /* copy (raed/write) all files */
-    await copyFiles(configFiles);
+    await copyFiles(testFiles);
     console.log("Copy ALL files success");
 }
 
@@ -204,37 +207,56 @@ run();
 todo
 
 - [x] start the cli...
+- [x] Prompt user before install
 - [x] Ensure a clean git directory. This will be used as a "backup".
 - [x] read in files from local directory
 - [x] try just reading in a single file for now
 - [x] copy files into repository (install dir)
 
-Hmmmm?
-- [ ] ? pull in files from dev dependencies?
-
 After functionality is implemented:
 
-- ensure it runs on windows (POSIX)
-- ensure it runs on osx
-- handle errors
-- prompt user before install
-*/
-/*
+- [ ] test that the cli runs on windows (POSIX)
+- [ ] test that the cli runs on osx
+
+Hardening & cleanup
+
+- [ ] Add error handling
+- [ ] Add logging
+- [ ] Add testing
+
+Additional functionality
+
+- [ ] Combine eslint configurations
+- [ ] Add a loading spinner or some sort of loading indicator
+- [ ] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
+- [ ] Add package dependencies
+- [ ] Install package dependencies
+- [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
+  - Perhaps use same read + write logic and take advantage of abstraction to use
+    in different parts of the app: build and cli
+
 Files to copy & overwrite
-- configs
-    - prettier
-    - stylelint
-    - editorconfig
-    - eslint (which one???)
-        - pojo - browser / base
-        - react - browser
-        - node
-    - eslint overrides (empty file)
-        ! This should only copy over _if_ there isn't already an overrides file
-    - stylelint overrides (empty file)
-        ! This should only copy over _if_ there isn't already an overrides file
-    - gitignore
-    - eslintignore
-    - stylintignore
-    - prettierignore
+
+- prettier
+- stylelint
+- editorconfig
+- eslint (which one???)
+    - pojo - browser / base
+    - react - browser
+    - node
+- eslint overrides (empty file)
+    ! This should only copy over _if_ there isn't already an overrides file
+- stylelint overrides (empty file)
+    ! This should only copy over _if_ there isn't already an overrides file
+- gitignore
+- eslintignore
+- stylintignore
+- prettierignore
+
+
+Questions / Thoughts?
+- [x] ? pull in files from dev dependencies?
+    - No
+
+
 */

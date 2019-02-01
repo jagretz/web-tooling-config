@@ -1,22 +1,15 @@
 {
-    "version": "independent",
+    "version": "0.1.0",
     "npmClient": "npm",
-    "packages": [
-        "packages/*"
-    ],
+    "packages": ["packages/*"],
     "command": {
         "publish": {
             "verifyAccess": false,
             "verifyRegistry": false,
-            "ignoreChanges": [
-                "ignored-file",
-                "*.md"
-            ]
+            "ignoreChanges": ["ignored-file", "*.md"]
         },
         "bootstrap": {
-            "npmClientArgs": [
-                "--no-package-lock"
-            ]
+            "npmClientArgs": ["--no-package-lock"]
         }
     }
 }
