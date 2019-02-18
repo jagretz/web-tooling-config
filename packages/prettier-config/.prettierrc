@@ -3,7 +3,7 @@
     "tabWidth": 4,
     "overrides": [
         {
-            "files": "*.md",
+            "files": "*.{md,mdx}",
             "options": {
                 "printWidth": 80,
                 "tabWidth": 2,
