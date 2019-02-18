@@ -1,3 +1,9 @@
+/**
+ * @module colorLog
+ *
+ * @desc adds some style to your consoles log statements!
+ */
+
 const chalk = require("chalk");
 const path = require("path");
 
@@ -26,5 +32,6 @@ module.exports = {
     log: log(chalk.white),
     error: log(chalk.red),
     success: log(chalk.green),
-    warn: log(chalk.yellow)
+    warn: log(chalk.yellow),
+    attention: log(chalk.orange)
 };
