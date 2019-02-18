@@ -1,11 +1,26 @@
 /**
- * @modules sources
+ * @module sources
  *
- * @description Exports configuration source file names and
+ * @desc Exports configuration source file names and
  * associated meta-data.
  */
 
-const testFiles = ["foo", "bar", ".foobar", "tar"];
+const configFiles = [
+    /* formatters */
+    ".editorconfig",
+    ".prettierrc",
+    ".prettierignore",
+    /* linters - Javascript */
+    ".eslintrc",
+    ".eslintignore",
+    /* linters - CSS */
+    ".stylelintrc",
+    ".stylelintignore",
+    /* Project config files */
+    ".gitignore"
+];
+
+const overridesFiles = ["eslint-overrides.js", "stylelint-overides.js"];
 
 /**
  * Files applicable to any environment and project.
@@ -48,7 +63,8 @@ const react = [{ source: "eslint-config-react", destination: ".eslintrc" }];
 const node = base;
 
 module.exports = {
-    testFiles,
+    configFiles,
+    overridesFiles,
     base,
     browser,
     react,

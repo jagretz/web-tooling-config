@@ -56,25 +56,25 @@ function welcomeMessage() {
     logger.log("Let's configure that app 😉");
 }
 
-const questions = [
-    {
-        type: "input",
-        name: "FILENAME",
-        message: "What is the name of the file without extension?"
-    },
-    {
-        type: "list",
-        name: "EXTENSION",
-        message: "What is the file extension?",
-        initial: "bork",
-        choices: [".rb", ".js", ".php", ".css"],
-        filter: function(val) {
-            return val.split(".")[1];
-        }
-    }
-];
+// const questions = [
+//     {
+//         type: "input",
+//         name: "FILENAME",
+//         message: "What is the name of the file without extension?"
+//     },
+//     {
+//         type: "list",
+//         name: "EXTENSION",
+//         message: "What is the file extension?",
+//         initial: "bork",
+//         choices: [".rb", ".js", ".php", ".css"],
+//         filter: function(val) {
+//             return val.split(".")[1];
+//         }
+//     }
+// ];
 
-const calculatelongestText = texts =>
+const calculateLongestText = texts =>
     Object.values(texts).reduce((longest, current) =>
         current.length > longest ? current : longest
     );
@@ -85,9 +85,22 @@ const BROWSER = "browser";
 const REACT = "react";
 const NODE = "node";
 
-const longest = calculatelongestText([BROWSER, REACT, NODE]).length;
+const longest = calculateLongestText([BROWSER, REACT, NODE]).length;
 
 function formatHint(longest) {
+    /**
+     * Pad the start of the `hint` with the whitespace equal to the length
+     * of the longest name minus the hint name.
+     *
+     * This allows a list of hints to be printed (output) with equal spacing
+     * between the hint name and the hint itself. ie
+     *
+     * ```bash
+     * FirstHintName  the hint for FirstHintName.
+     * foohint        the hint for foo.
+     * ```
+     */
+
     return (name, hint) => {
         return `${hint.padStart(hint.length + longest - name.length)}`;
     };
@@ -120,34 +133,37 @@ const projectQuestions = {
 function selectProjectType(type) {
     console.log(`Setting up project with the ${chalk.underline(type)} configs`);
 
-    switch (type) {
-        case REACT: {
-            console.log(`Project react configs.`);
-            return;
-        }
-        case NODE: {
-            console.log("Project is node!!!");
-            return;
-        }
-        default:
-        case BROWSER: {
-            console.log("Project is browser!!!");
-            return;
-        }
-    }
+    // temporary switch that does nothing be print a line to the console.
+    // I am not sure if this is needed anymore but saving until complete
+    // switch (type) {
+    //     case REACT: {
+    //         console.log(`Project react configs.`);
+    //         return;
+    //     }
+    //     case NODE: {
+    //         console.log("Project is node!!!");
+    //         return;
+    //     }
+    //     default:
+    //     case BROWSER: {
+    //         console.log("Project is browser!!!");
+    //         return;
+    //     }
+    // }
 }
 
 // const target = filename => path.join(__dirname, "templates", filename);
 const destination = filename => path.join(cwd, filename);
 
-const { testFiles } = require("./src/sources");
+const { configFiles, overridesFiles } = require("./src/sources");
 
 async function safeReadFile(filename) {
-    const dir = path.join(__dirname, "templates");
     const pathname = path.join("templates", filename);
     try {
         return await readFile(pathname);
     } catch (error) {
+        const dir = path.join(__dirname, "templates");
+
         if (error.code === "ENOENT") {
             // prints path.dirname templates
             console.log("path.dirname", path.dirname(pathname));
@@ -167,7 +183,7 @@ async function safeWriteFile(filename, ...rest) {
         return await writeFile(destination(filename), ...rest);
     } catch (error) {
         if (error.code === "EEXIST") {
-            logger.log("Skipped");
+            logger.log(`${chalk.yellow("Skipped")} ${chalk.cyan(filename)} - File already exists.`);
             return true;
         } else {
             logger.error(`Could not write file "${filename}" to desitination `);
@@ -179,13 +195,37 @@ async function safeWriteFile(filename, ...rest) {
 async function copyFiles(filenames) {
     return await filenames.map(async filename => {
         logger.log(`Processing ${chalk.cyan(filename)}`);
-        const file = await safeReadFile(filename);
 
+        const file = await safeReadFile(filename);
         await safeWriteFile(filename, file, { flag: "w" });
+
         logger.log(`Copied ${chalk.cyan(filename)}`);
     });
 }
 
+const fileContents = "module.exports = {}";
+
+/**
+ * Creates a new file. Logs the result of the operation to stdout.
+ *
+ * @param {*} filenames
+ * @returns
+ * @async
+ */
+async function createFiles(filenames) {
+    return await filenames.map(async filename => {
+        /*
+        The use of `fs.stat` to check if a file exists is _NOT_ recommmended.
+        @see [fs.stat]{@link https://nodejs.org/api/fs.html#fs_fs_stat_path_options_callback}
+        */
+        const fileExists = await safeWriteFile(filename, fileContents, { flag: "wx" });
+        if (!fileExists) {
+            logger.log(`Created ${chalk.cyan(filename)}`);
+        }
+    });
+}
+
+// main function that runs the script
 async function run() {
     // console.log("cwd", cwd); // The dir where the script is invoked
     // console.log("__dirname", __dirname); // The dir where the (invoked) script is defined
@@ -194,13 +234,18 @@ async function run() {
     welcomeMessage();
     const project = await prompt(projectQuestions);
     selectProjectType(project.type);
-    console.log("project :", project);
+    // console.log("project :", project);
 
     /* copy (raed/write) all files */
-    await copyFiles(testFiles);
+    await copyFiles(configFiles);
+
+    /* create overrides files */
+    await createFiles(overridesFiles);
+
     console.log("Copy ALL files success");
 }
 
+// invoke the script to start.
 run();
 
 /*
@@ -215,18 +260,21 @@ todo
 
 After functionality is implemented:
 
-- [ ] test that the cli runs on windows (POSIX)
-- [ ] test that the cli runs on osx
+- [x] test that the cli runs on windows (POSIX)
+- [x] test that the cli runs on osx
 
 Hardening & cleanup
 
 - [ ] Add error handling
 - [ ] Add logging
 - [ ] Add testing
+- [ ] Add code documentation
+- [ ] Publish to npm
+- [ ] Publish as an npx script
 
-Additional functionality
+Backlog
 
-- [ ] Combine eslint configurations
+- [ ] Combine eslint configurations?
 - [ ] Add a loading spinner or some sort of loading indicator
 - [ ] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
 - [ ] Add package dependencies
@@ -234,6 +282,8 @@ Additional functionality
 - [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
   - Perhaps use same read + write logic and take advantage of abstraction to use
     in different parts of the app: build and cli
+- Add a build system to obfuscate and minify. This is small, but making it
+  smaller makes it easier easier to publish and download from a users standpoint.
 
 Files to copy & overwrite
 
@@ -253,10 +303,8 @@ Files to copy & overwrite
 - stylintignore
 - prettierignore
 
-
-Questions / Thoughts?
-- [x] ? pull in files from dev dependencies?
-    - No
-
+Other linters?
+- markdown https://github.com/airbnb/javascript/blob/master/linters/.markdownlint.json
+- graphql -
 
 */

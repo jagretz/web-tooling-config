@@ -1,33 +1,33 @@
 {
-  "name": "@jagretz/web-configs-cli",
-  "version": "0.0.0",
-  "description": "CLI for web configs",
-  "keywords": [
-    "cli"
-  ],
-  "author": "jagretz <jagretz@gmail.com>",
-  "homepage": "https://github.com/jagretz/web-configs/packages/web-configs-cli#readme",
-  "license": "MIT",
-  "main": "lib/web-configs-cli.js",
-  "files": [
-    "cli"
-  ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jagretz/web-configs.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/jagretz/web-configs/issues"
-  },
-  "dependencies": {
-    "chalk": "^2.4.2",
-    "enquirer": "^2.3.0",
-    "shell.js": "^3.1.0"
-  }
+    "name": "@jagretz/web-configs-cli",
+    "version": "0.0.0",
+    "description": "CLI for web configs: linters, formatters",
+    "keywords": [
+        "cli"
+    ],
+    "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-configs/packages/web-configs-cli#readme",
+    "license": "MIT",
+    "main": "lib/web-configs-cli.js",
+    "files": [
+        "cli"
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jagretz/web-configs.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: run tests from root\" && exit 1"
+    },
+    "bugs": {
+        "url": "https://github.com/jagretz/web-configs/issues"
+    },
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "enquirer": "^2.3.0",
+        "shell.js": "^3.1.0"
+    }
 }
