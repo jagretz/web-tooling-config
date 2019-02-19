@@ -193,14 +193,16 @@ async function safeWriteFile(filename, ...rest) {
 }
 
 async function copyFiles(filenames) {
-    return await filenames.map(async filename => {
-        logger.log(`Processing ${chalk.cyan(filename)}`);
+    return Promise.all(
+        filenames.map(async filename => {
+            logger.log(`Processing ${chalk.cyan(filename)}`);
 
-        const file = await safeReadFile(filename);
-        await safeWriteFile(filename, file, { flag: "w" });
+            const file = await safeReadFile(filename);
+            await safeWriteFile(filename, file, { flag: "w" });
 
-        logger.log(`Copied ${chalk.cyan(filename)}`);
-    });
+            logger.log(`Copied ${chalk.cyan(filename)}`);
+        })
+    );
 }
 
 const fileContents = "module.exports = {}";
@@ -213,16 +215,20 @@ const fileContents = "module.exports = {}";
  * @async
  */
 async function createFiles(filenames) {
-    return await filenames.map(async filename => {
-        /*
-        The use of `fs.stat` to check if a file exists is _NOT_ recommmended.
-        @see [fs.stat]{@link https://nodejs.org/api/fs.html#fs_fs_stat_path_options_callback}
-        */
-        const fileExists = await safeWriteFile(filename, fileContents, { flag: "wx" });
-        if (!fileExists) {
-            logger.log(`Created ${chalk.cyan(filename)}`);
-        }
-    });
+    return await Promise.all(
+        filenames.map(async filename => {
+            /*
+            The use of `fs.stat` to check if a file exists is _NOT_ recommmended.
+            @see [fs.stat]{@link https://nodejs.org/api/fs.html#fs_fs_stat_path_options_callback}
+            */
+            const fileExists = await safeWriteFile(filename, fileContents, {
+                flag: "wx"
+            });
+            if (!fileExists) {
+                logger.log(`Created ${chalk.cyan(filename)}`);
+            }
+        })
+    );
 }
 
 // main function that runs the script
@@ -242,7 +248,7 @@ async function run() {
     /* create overrides files */
     await createFiles(overridesFiles);
 
-    console.log("Copy ALL files success");
+    console.log("Finished successfully!");
 }
 
 // invoke the script to start.
