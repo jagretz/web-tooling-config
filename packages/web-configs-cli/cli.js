@@ -9,6 +9,7 @@ const { prompt } = require("enquirer");
 const chalk = require("chalk");
 /* custom modules / non-node modules */
 const logger = require("./src/colorLog");
+const { filterPackageDependencies } = require("./src/utils");
 
 const cwd = process.cwd();
 
@@ -131,7 +132,8 @@ const projectQuestions = {
 };
 
 function selectProjectType(type) {
-    console.log(`Setting up project with the ${chalk.underline(type)} configs`);
+    // console.log(`Setting up project with the ${chalk.underline(type)} configs`);
+    logger.log(`Setting up project with the ${chalk.underline(type)} configs`);
 
     // temporary switch that does nothing be print a line to the console.
     // I am not sure if this is needed anymore but saving until complete
@@ -158,21 +160,16 @@ const destination = filename => path.join(cwd, filename);
 const { configFiles, overridesFiles } = require("./src/sources");
 
 async function safeReadFile(filename) {
-    const pathname = path.join("templates", filename);
     try {
-        return await readFile(pathname);
+        return await readFile(filename);
     } catch (error) {
         const dir = path.join(__dirname, "templates");
 
         if (error.code === "ENOENT") {
-            // prints path.dirname templates
-            console.log("path.dirname", path.dirname(pathname));
-            // prints path.basename tar
-            console.log("path.basename", path.basename(pathname));
-            logger.warn(`No such file "${filename}" in directory "${dir}". Skipping file.`);
+            logger.warn(`No such file "${filename}". Skipping file.`);
             return true;
         } else {
-            logger.error(`Could not read file "${filename}" from path ${dir}`);
+            logger.error(`Could not read file "${filename}"`);
             throw error;
         }
     }
@@ -192,12 +189,12 @@ async function safeWriteFile(filename, ...rest) {
     }
 }
 
-async function copyFiles(filenames) {
+async function copyFiles(pathname, filenames) {
     return Promise.all(
         filenames.map(async filename => {
             logger.log(`Processing ${chalk.cyan(filename)}`);
 
-            const file = await safeReadFile(filename);
+            const file = await safeReadFile(path.join(pathname, filename));
             await safeWriteFile(filename, file, { flag: "w" });
 
             logger.log(`Copied ${chalk.cyan(filename)}`);
@@ -242,13 +239,26 @@ async function run() {
     selectProjectType(project.type);
     // console.log("project :", project);
 
-    /* copy (raed/write) all files */
-    await copyFiles(configFiles);
+    /* copy (read/write) all template files */
+    await copyFiles(path.join(__dirname, "templates"), configFiles);
 
     /* create overrides files */
     await createFiles(overridesFiles);
 
-    console.log("Finished successfully!");
+    logger.success("Created web-config files successfully!");
+    logger.log("Installing package dependencies");
+
+    // read install projects package.json
+    const projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
+    // read the cli's package.json
+    // const packageJson = await safeReadFile(path.join(__dirname, "package.json"));
+    // Have a list a project deps to install given the project.type: eslint, stylelint, etc
+
+    // pass the devDeps to the filter function
+    const devDependencies = {};
+    await filterPackageDependencies(devDependencies, project.type);
+
+    logger.success("Finished successfully!");
 }
 
 // invoke the script to start.
@@ -264,13 +274,10 @@ todo
 - [x] try just reading in a single file for now
 - [x] copy files into repository (install dir)
 
-After functionality is implemented:
+Hardening & cleanup
 
 - [x] test that the cli runs on windows (POSIX)
 - [x] test that the cli runs on osx
-
-Hardening & cleanup
-
 - [ ] Add error handling
 - [ ] Add logging
 - [ ] Add testing
@@ -280,36 +287,19 @@ Hardening & cleanup
 
 Backlog
 
-- [ ] Combine eslint configurations?
-- [ ] Add a loading spinner or some sort of loading indicator
-- [ ] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
-- [ ] Add package dependencies
+- [x] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
+- [ ] merge into package.json `devDpendencies` with matching keys
+- [ ] merge into package.json `scripts` with matching keys
 - [ ] Install package dependencies
+- [ ] Add a loading spinner for install process
 - [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
   - Perhaps use same read + write logic and take advantage of abstraction to use
     in different parts of the app: build and cli
 - Add a build system to obfuscate and minify. This is small, but making it
   smaller makes it easier easier to publish and download from a users standpoint.
 
-Files to copy & overwrite
-
-- prettier
-- stylelint
-- editorconfig
-- eslint (which one???)
-    - pojo - browser / base
-    - react - browser
-    - node
-- eslint overrides (empty file)
-    ! This should only copy over _if_ there isn't already an overrides file
-- stylelint overrides (empty file)
-    ! This should only copy over _if_ there isn't already an overrides file
-- gitignore
-- eslintignore
-- stylintignore
-- prettierignore
-
 Other linters?
+
 - markdown https://github.com/airbnb/javascript/blob/master/linters/.markdownlint.json
 - graphql -
 
