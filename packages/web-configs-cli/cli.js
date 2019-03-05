@@ -10,6 +10,7 @@ const chalk = require("chalk");
 /* custom modules / non-node modules */
 const logger = require("./src/colorLog");
 const { filterPackageDependencies } = require("./src/utils");
+const { getDevDependenciesByProjectType } = require("./src/packageSources");
 
 const cwd = process.cwd();
 
@@ -237,7 +238,7 @@ async function run() {
     welcomeMessage();
     const project = await prompt(projectQuestions);
     selectProjectType(project.type);
-    // console.log("project :", project);
+    console.log("project :", project);
 
     /* copy (read/write) all template files */
     await copyFiles(path.join(__dirname, "templates"), configFiles);
@@ -246,17 +247,28 @@ async function run() {
     await createFiles(overridesFiles);
 
     logger.success("Created web-config files successfully!");
-    logger.log("Installing package dependencies");
+    logger.log("WIP: Gathering necessary package dependencies");
 
-    // read install projects package.json
+    /* Current WIP -- install package dependencies */
+
+    // read the destination (current) projects package.json
     const projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
-    // read the cli's package.json
-    // const packageJson = await safeReadFile(path.join(__dirname, "package.json"));
-    // Have a list a project deps to install given the project.type: eslint, stylelint, etc
+    const projectPackageJsonString = JSON.parse(projectPackageJson);
+    console.log("projectPackageJsonString", projectPackageJsonString.devDependencies);
+    // Have a list a deps that are to be installed given the project.type: web, react, node, etx
+    const devDependenciesToInclude = getDevDependenciesByProjectType(project.type);
+    // console.log("devDependenciesToInclude", devDependenciesToInclude);
+    // filter only 'unique" dependencies between the dest. proj. and the list of deps
+    const devDependenciesToInstall = filterPackageDependencies(
+        projectPackageJsonString.devDependencies,
+        devDependenciesToInclude
+    );
 
-    // pass the devDeps to the filter function
-    const devDependencies = {};
-    await filterPackageDependencies(devDependencies, project.type);
+    // install each "unique" dependency into the dest. projs. as devDeps.
+
+    logger.log("WIP: Installing package dependencies");
+
+    // repeat the process for the `package.devDependencies` for the `package.scripts`
 
     logger.success("Finished successfully!");
 }
