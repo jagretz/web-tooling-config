@@ -25,6 +25,13 @@
     "bugs": {
         "url": "https://github.com/jagretz/web-configs/issues"
     },
+    "//devDependencies": "devDeps are ONLY for testing purposes.",
+    "devDependencies": {
+        "husky": "^2.4.2",
+        "jason": "^2.3.0",
+        "lint-staged": "^2.3.0",
+        "testing": "^3.1.0"
+    },
     "dependencies": {
         "chalk": "^2.4.2",
         "enquirer": "^2.3.0",

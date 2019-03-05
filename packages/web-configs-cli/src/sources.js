@@ -22,26 +22,6 @@ const configFiles = [
 
 const overridesFiles = ["eslint-overrides.js", "stylelint-overides.js"];
 
-const projectDependencies = [
-    "husky",
-    "lint-staged",
-    "eslint",
-    "stylelint",
-    "prettier",
-    "eslint-config-prettier"
-];
-
-const browserProjectDependencies = ["@jagretz/eslint-config-base"];
-
-const reactProjectDependencies = ["@jagretz/eslint-config-react"];
-
-const projectScripts = {
-    precommit: "",
-    eslint: "eslint ./",
-    stylelint: "stylelint ./",
-    prettier: "prettier ./"
-};
-
 /**
  * Files applicable to any environment and project.
  *
