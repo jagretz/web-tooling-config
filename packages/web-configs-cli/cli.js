@@ -276,7 +276,6 @@ async function run() {
         devDependenciesToInclude,
         projectPackageJsonString.devDependencies
     );
-
     console.log("Acquired devDependenciesToInstall:", devDependenciesToInstall);
 
     // install "unique" dependencies into the dest. projects (cwd) `devDependencies`.
@@ -287,7 +286,15 @@ async function run() {
     //     logger.error("Failed to install package dependencies.");
     // }
 
-    /* Current WIP -- write `package.scripts` to the cwd package.json */
+    // overwrite scripts -- sarz bro :D
+    const scripts = {
+        ...projectPackageJsonString.scripts,
+        ...getScriptsByProjectType(project.type)
+    };
+    const updatedPackageJson = JSON.stringify({ ...projectPackageJsonString, ...{ scripts } });
+    // overwrite package.json... it's not _that_ large of a file so I am not
+    // too concerned about memory consumtion or performance with this.
+    await safeWriteFile("package.json", updatedPackageJson);
 
     logger.success("Work Complete!");
 }
@@ -304,15 +311,16 @@ todo
 - [x] read in files from local directory
 - [x] try just reading in a single file for now
 - [x] copy files into repository (install dir)
+- [x] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
+- [x] merge into package.json `devDpendencies` with matching keys
 - [x] Install package dependencies
+- [x] merge into package.json `scripts` with matching keys
 
 In Progress
 
-- [ ] merge into package.json `scripts` with matching keys
 
 Backlog
 
-- [ ] Add a loading spinner for install process
 - [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
 - Perhaps use same read + write logic and take advantage of abstraction to use
 in different parts of the app: build and cli
@@ -320,15 +328,14 @@ in different parts of the app: build and cli
 smaller makes it easier easier to publish and download from a users standpoint.
 - [ ] Update package dependencies to install -- currently the list is small for testing purposes.
 
+Out of Scope
 
-Complete
-
-- [x] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
-- [x] merge into package.json `devDpendencies` with matching keys
+- [ ] Add a loading spinner for install process
 
 Hardening & cleanup
 
 - [ ] Add / update js docs
+- [ ] Update package.json scripts
 - [ ] Remove bogus comments
 - [x] test that the cli runs on windows
 - [ ] test that the cli runs on osx
