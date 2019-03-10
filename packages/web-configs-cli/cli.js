@@ -11,6 +11,7 @@ const chalk = require("chalk");
 const logger = require("./src/colorLog");
 const { filterPackageDependencies, safeSpawn } = require("./src/utils");
 const { getDevDependenciesByProjectType } = require("./src/packageSources");
+const { getScriptsByProjectType } = require("./src/packageScripts");
 
 const cwd = process.cwd();
 

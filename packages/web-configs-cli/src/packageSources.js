@@ -4,8 +4,8 @@
  * @desc Exports utils useful in constructing the `package.json`.
  */
 
-//  ! this is duplicated in the `cli.js` only temporarily until we
-//  ! find it's rightful home
+//  ! this is duplicated in the `cli.js` & packageScripts.js.
+//  ! only temporarily until we find it's rightful home
 const BROWSER = "browser";
 const REACT = "react";
 const NODE = "node";
@@ -40,17 +40,6 @@ const browserProjectDependencies = ["@jagretz/eslint-config-base"];
  * @type {Array.<string>}
  */
 const reactProjectDependencies = ["@jagretz/eslint-config-react"];
-
-/**
- * `package.scripts` that are to be installed into the destination
- * project. Specific to ALL projects.
- */
-const projectScripts = {
-    precommit: "",
-    eslint: "eslint ./",
-    stylelint: "stylelint ./",
-    prettier: "prettier ./"
-};
 
 const getDevDependenciesByProjectType = type => {
     return projectDependencies.concat(
