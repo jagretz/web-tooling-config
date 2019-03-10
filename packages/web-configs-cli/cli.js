@@ -1,15 +1,15 @@
 const fs = require("fs");
 const path = require("path");
+// /** @see [child_process]{@link https://nodejs.org/api/child_process.html#child_process_child_process} */
+const { spawn } = require("child_process");
 /** @see [promisify]{@link https://nodejs.org/dist/latest-v8.x/docs/api/util.html#util_util_promisify_original} */
 const { promisify } = require("util");
-// /** @see [child_process]{@link https://nodejs.org/api/child_process.html#child_process_child_process} */
-// const { exec, spawn } = require("child_process");
 /** @see [enquirer]{@link https://www.npmjs.com/package/enquirer} */
 const { prompt } = require("enquirer");
 const chalk = require("chalk");
 /* custom modules / non-node modules */
 const logger = require("./src/colorLog");
-const { filterPackageDependencies } = require("./src/utils");
+const { filterPackageDependencies, safeSpawn } = require("./src/utils");
 const { getDevDependenciesByProjectType } = require("./src/packageSources");
 
 const cwd = process.cwd();
@@ -26,7 +26,6 @@ const writeFile = promisify(fs.writeFile);
  * @see [Stats object] {@link https://nodejs.org/api/fs.html#fs_class_fs_stats}
  */
 const statPromise = promisify(fs.stat);
-// const execCmd = promisify(exec);
 
 // testing async/await with promisify-ied `fs.stat`
 async function asyncStat() {
@@ -229,6 +228,18 @@ async function createFiles(filenames) {
     );
 }
 
+function spawnNpmProcess() {
+    return spawn(
+        process.platform === "win32" ? "npm.cmd" : "npm",
+        // testing... comment / uncomment lines to test.
+        // ["install", "husky", "jagretz"],
+        ["install", "--save-dev", "husky"],
+        {
+            stdio: "inherit"
+        }
+    );
+}
+
 // main function that runs the script
 async function run() {
     // console.log("cwd", cwd); // The dir where the script is invoked
@@ -249,28 +260,35 @@ async function run() {
     logger.success("Created web-config files successfully!");
     logger.log("WIP: Gathering necessary package dependencies");
 
-    /* Current WIP -- install package dependencies */
-
     // read the destination (current) projects package.json
     const projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
     const projectPackageJsonString = JSON.parse(projectPackageJson);
-    console.log("projectPackageJsonString", projectPackageJsonString.devDependencies);
+    console.log(
+        "projectPackageJsonString.devDependencies",
+        projectPackageJsonString.devDependencies
+    );
     // Have a list a deps that are to be installed given the project.type: web, react, node, etx
     const devDependenciesToInclude = getDevDependenciesByProjectType(project.type);
     // console.log("devDependenciesToInclude", devDependenciesToInclude);
     // filter only 'unique" dependencies between the dest. proj. and the list of deps
     const devDependenciesToInstall = filterPackageDependencies(
-        projectPackageJsonString.devDependencies,
-        devDependenciesToInclude
+        devDependenciesToInclude,
+        projectPackageJsonString.devDependencies
     );
 
-    // install each "unique" dependency into the dest. projs. as devDeps.
+    console.log("Acquired devDependenciesToInstall:", devDependenciesToInstall);
 
-    logger.log("WIP: Installing package dependencies");
+    // install "unique" dependencies into the dest. projects (cwd) `devDependencies`.
+    // const code = await safeSpawn(spawnNpmProcess);
+    // if (code === 0) {
+    //     logger.success("Successfully installed package dependencies.");
+    // } else {
+    //     logger.error("Failed to install package dependencies.");
+    // }
 
-    // repeat the process for the `package.devDependencies` for the `package.scripts`
+    /* Current WIP -- write `package.scripts` to the cwd package.json */
 
-    logger.success("Finished successfully!");
+    logger.success("Work Complete!");
 }
 
 // invoke the script to start.
@@ -285,34 +303,70 @@ todo
 - [x] read in files from local directory
 - [x] try just reading in a single file for now
 - [x] copy files into repository (install dir)
+- [x] Install package dependencies
 
-Hardening & cleanup
+In Progress
 
-- [x] test that the cli runs on windows (POSIX)
-- [x] test that the cli runs on osx
-- [ ] Add error handling
-- [ ] Add logging
-- [ ] Add testing
-- [ ] Add code documentation
-- [ ] Publish to npm
-- [ ] Publish as an npx script
+- [ ] merge into package.json `scripts` with matching keys
 
 Backlog
 
-- [x] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
-- [ ] merge into package.json `devDpendencies` with matching keys
-- [ ] merge into package.json `scripts` with matching keys
-- [ ] Install package dependencies
 - [ ] Add a loading spinner for install process
 - [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
-  - Perhaps use same read + write logic and take advantage of abstraction to use
-    in different parts of the app: build and cli
+- Perhaps use same read + write logic and take advantage of abstraction to use
+in different parts of the app: build and cli
 - Add a build system to obfuscate and minify. This is small, but making it
-  smaller makes it easier easier to publish and download from a users standpoint.
+smaller makes it easier easier to publish and download from a users standpoint.
+- [ ] Update package dependencies to install -- currently the list is small for testing purposes.
+
+
+Complete
+
+- [x] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
+- [x] merge into package.json `devDpendencies` with matching keys
+
+Hardening & cleanup
+
+- [ ] Add / update js docs
+- [ ] Remove bogus comments
+- [x] test that the cli runs on windows
+- [ ] test that the cli runs on osx
+- [ ] Add error handling
+- [ ] Add logging
+- [ ] Add testing
+- [ ] Add / update project documentation
+- [ ] Publish to npm
+- [ ] Publish as an npx script
 
 Other linters?
 
 - markdown https://github.com/airbnb/javascript/blob/master/linters/.markdownlint.json
 - graphql -
+
+*/
+
+/*
+Error received on npm install
+
+Not connected to the internet
+
+web-configs | WIP: Installing package dependencies
+(node:23032) UnhandledPromiseRejectionWarning: Error: Command failed: npm install husky lint-staged
+npm WARN registry Using stale data from https://registry.npmjs.org/ because the host is inaccessible -- are you offline?
+npm WARN registry Using stale package data from https://registry.npmjs.org/ due to a request error during revalidation.
+npm ERR! code ETARGET
+npm ERR! notarget No matching version found for lint-staged@^2.3.0
+npm ERR! notarget In most cases you or one of your dependencies are requesting
+npm ERR! notarget a package version that doesn't exist.
+
+npm ERR! A complete log of this run can be found in:
+npm ERR!     C:\Users\gretzj\AppData\Roaming\npm-cache\_logs\2019-03-09T18_15_57_088Z-debug.log
+
+    at ChildProcess.exithandler (child_process.js:294:12)
+    at ChildProcess.emit (events.js:189:13)
+    at maybeClose (internal/child_process.js:970:16)
+    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)
+(node:23032) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
+(node:23032) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
 
 */

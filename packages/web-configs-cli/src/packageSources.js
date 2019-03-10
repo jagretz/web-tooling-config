@@ -1,8 +1,7 @@
 /**
  * @module packageSources
  *
- * @desc Exports utils useful in constructing the `package.json`. ie
- * `package.scripts`, `package.dependencies`, etc
+ * @desc Exports utils useful in constructing the `package.json`.
  */
 
 //  ! this is duplicated in the `cli.js` only temporarily until we
