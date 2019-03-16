@@ -15,21 +15,39 @@ const { getScriptsByProjectType } = require("./src/packageScripts");
 
 const cwd = process.cwd();
 
-const readFile = promisify(fs.readFile);
 /**
+ * Wraps success callback in a `Promise`
+ */
+const readFile = promisify(fs.readFile);
+
+/**
+ * Wraps success callback in a `Promise`
  * @see https://nodejs.org/api/fs.html#fs_fs_write_fd_string_position_encoding_callback
  * @see [File System Flags]{@link https://nodejs.org/api/fs.html#fs_file_system_flags}
  */
 const writeFile = promisify(fs.writeFile);
 
 /**
+ * Wraps success callback in a `Promise`
  * @see [fs.stat]{@link https://nodejs.org/api/fs.html#fs_fs_stat_path_options_callback}
  * @see [Stats object] {@link https://nodejs.org/api/fs.html#fs_class_fs_stats}
  */
 const statPromise = promisify(fs.stat);
 
-// testing async/await with promisify-ied `fs.stat`
-async function asyncStat() {
+/**
+ * This will check the install directory for an existing `.git` directory.
+ * The reason to run this check is to prevent the end-user from unintentionally
+ * mixing in changes made from _this_ application with uncommitted changes
+ * in their project.
+ *
+ * Exists if an error is thrown.
+ *
+ * @returns {Promise resolves fs.stat} no processing necessary on the Prommise
+ * or the resolve to `fs.stat`. The return simple means success.
+ * @throws {Error} if a `.git` directory does not exist.
+ * @async
+ */
+async function checkForExistingGitDirectory() {
     // let stats;
     try {
         return await statPromise(path.join(cwd, ".git"));
@@ -37,12 +55,13 @@ async function asyncStat() {
     } catch (error) {
         if (error.code === "ENOENT" && error.path.endsWith(".git")) {
             /*
+            The error from the child_process would produce something along the
+            lines of (windows):
             errno: -4058,
             code: 'ENOENT',
             syscall: 'stat',
-            path: 'C:\\ngss\\g\\web-configs\\packages\\web-configs-cli\\.git'
+            path: 'C:\\git\\web-configs\\packages\\web-configs-cli\\.git'
             */
-            // console.error(`meow > Git not detected. Make sure you run this command from a "clean" git directory.`);
             logger.error(
                 `Git not detected. Make sure to run this command from within a "clean" git directory.`
             );
@@ -50,32 +69,21 @@ async function asyncStat() {
             console.error("Problem detected:\n", error);
         }
         process.exit();
-        // return null;
     }
 }
 
+/**
+ * Logs a welcome message to the end-user.
+ */
 function welcomeMessage() {
     logger.log("Let's configure that app 😉");
 }
 
-// const questions = [
-//     {
-//         type: "input",
-//         name: "FILENAME",
-//         message: "What is the name of the file without extension?"
-//     },
-//     {
-//         type: "list",
-//         name: "EXTENSION",
-//         message: "What is the file extension?",
-//         initial: "bork",
-//         choices: [".rb", ".js", ".php", ".css"],
-//         filter: function(val) {
-//             return val.split(".")[1];
-//         }
-//     }
-// ];
-
+/**
+ *
+ * @param {array<string>} texts
+ */
+// TODO: 03/16 jagretz - document
 const calculateLongestText = texts =>
     Object.values(texts).reduce((longest, current) =>
         current.length > longest ? current : longest
@@ -87,8 +95,10 @@ const BROWSER = "browser";
 const REACT = "react";
 const NODE = "node";
 
+// TODO: 03/16 jagretz - document
 const longest = calculateLongestText([BROWSER, REACT, NODE]).length;
 
+// TODO: 03/16 jagretz - document
 function formatHint(longest) {
     /**
      * Pad the start of the `hint` with the whitespace equal to the length
@@ -109,6 +119,10 @@ function formatHint(longest) {
 }
 const padHint = formatHint(longest);
 
+/**
+ * Questions about the type of project the user is targeting.
+ * Configured to be uses with `enquirer.prompt`
+ */
 const projectQuestions = {
     type: "select",
     name: "type",
@@ -131,35 +145,21 @@ const projectQuestions = {
         }
     ]
 };
-
-function selectProjectType(type) {
-    // console.log(`Setting up project with the ${chalk.underline(type)} configs`);
-    logger.log(`Setting up project with the ${chalk.underline(type)} configs`);
-
-    // temporary switch that does nothing be print a line to the console.
-    // I am not sure if this is needed anymore but saving until complete
-    // switch (type) {
-    //     case REACT: {
-    //         console.log(`Project react configs.`);
-    //         return;
-    //     }
-    //     case NODE: {
-    //         console.log("Project is node!!!");
-    //         return;
-    //     }
-    //     default:
-    //     case BROWSER: {
-    //         console.log("Project is browser!!!");
-    //         return;
-    //     }
-    // }
-}
-
+// TODO: 03/16 jagretz - document
 // const target = filename => path.join(__dirname, "templates", filename);
 const destination = filename => path.join(cwd, filename);
 
 const { configFiles, overridesFiles } = require("./src/sources");
 
+/**
+ * Looks at the directory of the cli for a `templates`
+ * directory to read files by #filename from.
+ *
+ * @param {string} filename the name of the file to read.
+ * @returns {Promise}
+ * @throws {Error} failure to read the file.
+ * @async
+ */
 async function safeReadFile(filename) {
     try {
         return await readFile(filename);
@@ -176,6 +176,18 @@ async function safeReadFile(filename) {
     }
 }
 
+/**
+ * Looks at the directory where the cli was invoked
+ * to write a file.
+ *
+ * This will create a new file with the name of #filename or overwrite a file
+ * with the same name if one already exists.
+ *
+ * @param {string} filename the name of the file to write new or overwrite.
+ * @returns {Promise}
+ * @throws {Error} failure to write the file.
+ * @async
+ */
 async function safeWriteFile(filename, ...rest) {
     try {
         return await writeFile(destination(filename), ...rest);
@@ -190,6 +202,15 @@ async function safeWriteFile(filename, ...rest) {
     }
 }
 
+/**
+ * Read and write files from the cli package to the location where
+ * the cli was invoked.
+ *
+ * @param {string} pathname directory to find the files specified by #filenames
+ * @param {array<string>} filenames array of names for each file to copy.
+ * @returns {Promise} The return simple means success.
+ * @async
+ */
 async function copyFiles(pathname, filenames) {
     return Promise.all(
         filenames.map(async filename => {
@@ -206,10 +227,11 @@ async function copyFiles(pathname, filenames) {
 const fileContents = "module.exports = {}";
 
 /**
- * Creates a new file. Logs the result of the operation to stdout.
+ * Creates a new file for each name in #filenames.
+ * Logs the result of the operation to stdout.
  *
- * @param {*} filenames
- * @returns
+ * @param {Array<String>} filenames names of the files to create (write).
+ * @returns {Promise}
  * @async
  */
 async function createFiles(filenames) {
@@ -229,6 +251,7 @@ async function createFiles(filenames) {
     );
 }
 
+// FIXME: 03/16 jagretz - this does not appear to be used anymore.
 function spawnNpmProcess() {
     return spawn(
         process.platform === "win32" ? "npm.cmd" : "npm",
@@ -241,36 +264,51 @@ function spawnNpmProcess() {
     );
 }
 
-// main function that runs the script
+/**
+ * Entry point of the CLI.
+ * @async
+ */
 async function run() {
-    // console.log("cwd", cwd); // The dir where the script is invoked
-    // console.log("__dirname", __dirname); // The dir where the (invoked) script is defined
+    await checkForExistingGitDirectory();
 
-    await asyncStat();
     welcomeMessage();
+
+    /**
+     * Prompt the user for the target project type.
+     * @return {object} the users selection (answer)
+     */
     const project = await prompt(projectQuestions);
-    selectProjectType(project.type);
-    console.log("project :", project);
+
+    /* Repeat users choice back to them. */
+
+    logger.log(`Setting up project with the ${chalk.underline(project.type)} configs`);
 
     /* copy (read/write) all template files */
     await copyFiles(path.join(__dirname, "templates"), configFiles);
 
-    /* create overrides files */
+    /* create the overrides template files */
     await createFiles(overridesFiles);
 
+    // Update the user with current progress
     logger.success("Created web-config files successfully!");
     logger.log("WIP: Gathering necessary package dependencies");
 
-    // read the destination (current) projects package.json
+    // read the isntall locations package.json
     const projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
+
+    // TODO: 03/16 jagretz - can likely be abstracted as a separate step
+    // * this is the install step
     const projectPackageJsonString = JSON.parse(projectPackageJson);
-    console.log(
-        "projectPackageJsonString.devDependencies",
-        projectPackageJsonString.devDependencies
-    );
+    // console.log(
+    //     "projectPackageJsonString.devDependencies",
+    //     projectPackageJsonString.devDependencies
+    // );
+
     // Have a list a deps that are to be installed given the project.type: web, react, node, etx
     const devDependenciesToInclude = getDevDependenciesByProjectType(project.type);
+
     // console.log("devDependenciesToInclude", devDependenciesToInclude);
+
     // filter only 'unique" dependencies between the dest. proj. and the list of deps
     const devDependenciesToInstall = filterPackageDependencies(
         devDependenciesToInclude,
@@ -278,6 +316,7 @@ async function run() {
     );
     console.log("Acquired devDependenciesToInstall:", devDependenciesToInstall);
 
+    /* commented out while testing other features. */
     // install "unique" dependencies into the dest. projects (cwd) `devDependencies`.
     // const code = await safeSpawn(spawnNpmProcess);
     // if (code === 0) {
@@ -286,12 +325,15 @@ async function run() {
     //     logger.error("Failed to install package dependencies.");
     // }
 
+    // TODO: 03/16 jagretz - can likely be abstracted as a separate step
+    // * this is the overwrite `scripts` step
     // overwrite scripts -- sarz bro :D
     const scripts = {
         ...projectPackageJsonString.scripts,
         ...getScriptsByProjectType(project.type)
     };
     const updatedPackageJson = JSON.stringify({ ...projectPackageJsonString, ...{ scripts } });
+
     // overwrite package.json... it's not _that_ large of a file so I am not
     // too concerned about memory consumtion or performance with this.
     await safeWriteFile("package.json", updatedPackageJson);
@@ -299,11 +341,11 @@ async function run() {
     logger.success("Work Complete!");
 }
 
-// invoke the script to start.
+/* Invoke the script to start... */
 run();
 
 /*
-todo
+Complete
 
 - [x] start the cli...
 - [x] Prompt user before install
@@ -318,23 +360,11 @@ todo
 
 In Progress
 
-
-Backlog
-
-- [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
-- Perhaps use same read + write logic and take advantage of abstraction to use
-in different parts of the app: build and cli
-- Add a build system to obfuscate and minify. This is small, but making it
-smaller makes it easier easier to publish and download from a users standpoint.
-- [ ] Update package dependencies to install -- currently the list is small for testing purposes.
-
-Out of Scope
-
-- [ ] Add a loading spinner for install process
-
-Hardening & cleanup
-
 - [ ] Add / update js docs
+
+
+Ready for Development
+
 - [ ] Update package.json scripts
 - [ ] Remove bogus comments
 - [x] test that the cli runs on windows
@@ -345,6 +375,21 @@ Hardening & cleanup
 - [ ] Add / update project documentation
 - [ ] Publish to npm
 - [ ] Publish as an npx script
+- [ ] Take care of the below error, "disconnected-state"
+
+
+Backlog
+
+- [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
+    - Perhaps use same read + write logic and take advantage of abstraction to use
+    in different parts of the app: build and cli
+- Add a build system to obfuscate and minify. This package is already small, but making it
+smaller makes it easier easier to publish and download from an end-user standpoint.
+- [ ] Update package dependencies to install -- currently the list is small for testing purposes.
+
+Out of Scope
+
+- [ ] Add a loading spinner for install process
 
 Other linters?
 
@@ -354,6 +399,8 @@ Other linters?
 */
 
 /*
+Error - disconnected-state
+
 Error received on npm install
 
 Not connected to the internet
