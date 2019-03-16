@@ -4,6 +4,10 @@
  * @desc Exports utils useful in constructing the `package.json`.
  */
 
+module.exports = {
+    getDevDependenciesByProjectType
+};
+
 //  ! this is duplicated in the `cli.js` & packageScripts.js.
 //  ! only temporarily until we find it's rightful home
 const BROWSER = "browser";
@@ -47,8 +51,4 @@ const getDevDependenciesByProjectType = type => {
         type === NODE ? browserProjectDependencies : [],
         type === REACT ? browserProjectDependencies.concat(reactProjectDependencies) : []
     );
-};
-
-module.exports = {
-    getDevDependenciesByProjectType
 };

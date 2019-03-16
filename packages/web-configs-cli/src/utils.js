@@ -4,6 +4,11 @@
  * @desc Exports general use-case utilities for the cli and all modules.
  */
 
+module.exports = {
+    filterPackageDependencies,
+    safeSpawn
+};
+
 // * filters the cw package devDeps by the project type.
 async function filterPackageDependencies(projectDependencies, packageJson) {
     // return the devDeps to be installed ONLY if they don't already
@@ -64,7 +69,6 @@ function spawnAsPromise(invokeProcess) {
     });
 }
 
-module.exports = {
-    filterPackageDependencies,
-    safeSpawn
-};
+function installPackageDependencies() {}
+
+function mergePackageScripts() {}

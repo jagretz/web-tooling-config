@@ -5,6 +5,9 @@
  * associated meta-data.
  */
 
+/**
+ * @type {array<string>} names of the configuration files.
+ */
 const configFiles = [
     /* formatters */
     ".editorconfig",
@@ -20,6 +23,9 @@ const configFiles = [
     ".gitignore"
 ];
 
+/**
+ * @type {array<string>} names of the "overrides" configuration files.
+ */
 const overridesFiles = ["eslint-overrides.js", "stylelint-overides.js"];
 
 /**
@@ -44,7 +50,10 @@ const base = [
 ];
 
 /**
- * Files specific to browser environments
+ * Files specific to browser environments.
+ * @type {array<object>}
+ * @prop {string} source name of the file to read
+ * @prop {string} destination name of the file to write
  */
 const browser = [
     { source: ".stylelintrc", destination: ".stylelintrc" },
@@ -53,12 +62,16 @@ const browser = [
 ];
 
 /**
- * Files specific to react projects
+ * Files specific to react projects.
+ * @type {array<object>}
+ * @prop {string} source name of the file to read
+ * @prop {string} destination name of the file to write
  */
 const react = [{ source: "eslint-config-react", destination: ".eslintrc" }];
 
 /**
- * Files specific to node environments
+ * Files specific to node environments.
+ * @see #base
  */
 const node = base;
 
