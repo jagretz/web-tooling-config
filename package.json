@@ -2,6 +2,7 @@
     "name": "@jagretz/web-configs",
     "description": "A monorepo of linter and formatter configurations for browser-based web projects",
     "author": "jagretz <jagretz@gmail.com>",
+    "version": "0.1.1-alpha.0",
     "private": false,
     "license": "MIT",
     "repository": {
