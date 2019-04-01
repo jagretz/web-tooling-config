@@ -4,13 +4,8 @@
  * @desc Exports general use-case utilities for the cli and all modules.
  */
 
-module.exports = {
-    filterPackageDependencies,
-    safeSpawn
-};
-
 // * filters the cw package devDeps by the project type.
-async function filterPackageDependencies(projectDependencies, packageJson) {
+async function leftOuterJoin(projectDependencies, packageJson) {
     // return the devDeps to be installed ONLY if they don't already
     // exist in the destination projects devDeps.
 
@@ -27,17 +22,26 @@ async function filterPackageDependencies(projectDependencies, packageJson) {
 }
 
 /*
-Why we use `child_process.spawn` over `child_process.exec`
+Why we use `child_process.spawn` over `child_process.exec`:
 
-exec buffers the command's entire output instead of using a stream. In other
-words, you'll receive the WHOLE output instead of a stream of messages
+`exec` buffers the command's entire output instead of using a stream. In other
+words, you'll receive the WHOLE output instead of a _stream_ of messages
 as each message (output) is generated.
 
-spawn can directly use IO streams of the parent/caller by specifying
+`spawn` can directly use IO streams of the parent/caller by specifying
 `stdio: inherit` option. This allows the output from the executing script to
 be displayed as messages are emitted (received).
 */
-/* where code = { success: 0, error: 1 }  */
+
+/**
+ * Wraps `spawn` with async/await, returning a success or error integer similar
+ * to the error codes returned by other ChildProcess.
+ *
+ * @param {ChildProcess} spawnNpmProcess
+ * @returns {number} `0` indicating a success or `1` indicating that there was
+ * an error the ChildProcess could not handle.
+ * @async
+ */
 async function safeSpawn(spawnNpmProcess) {
     try {
         await spawnAsPromise(spawnNpmProcess);
@@ -48,6 +52,10 @@ async function safeSpawn(spawnNpmProcess) {
     }
 }
 
+/**
+ * Wraps `spawn` in a promise.
+ * @returns {Promise} wrapping `spawn`.
+ */
 function spawnAsPromise(invokeProcess) {
     /*
     ! `error` from `spawn` is not the same as `stderr`.
@@ -69,6 +77,9 @@ function spawnAsPromise(invokeProcess) {
     });
 }
 
-function installPackageDependencies() {}
-
 function mergePackageScripts() {}
+
+module.exports = {
+    leftOuterJoin,
+    safeSpawn
+};

@@ -1,8 +1,7 @@
 /**
  * @module sources
  *
- * @desc Exports configuration source file names and
- * associated meta-data.
+ * @desc Exports configuration source file names and associated meta-data.
  */
 
 /**

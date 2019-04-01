@@ -20,8 +20,7 @@ Or use
 
 ## What gets Installed
 
-"extends": [
- "eslint:recommended",
+"extends": [ "eslint:recommended",
 
 List deps here...
 

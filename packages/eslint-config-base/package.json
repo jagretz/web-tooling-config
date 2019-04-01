@@ -1,28 +1,31 @@
 {
-  "name": "@jagretz/eslint-config-base",
-  "version": "0.0.0",
-  "description": "Base eslint config",
-  "keywords": [
-    "eslint"
-  ],
-  "author": "jagretz <jagretz@gmail.com>",
-  "homepage": "https://github.com/jagretz/web-configs/packages/eslint-config-base#readme",
-  "license": "MIT",
-  "main": "lib/eslint-config-base.js",
-  "files": [
-    ""
-  ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jagretz/web-configs/packages/eslint-config-base.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/jagretz/web-configs/issues"
-  }
+    "name": "@jagretz/eslint-config-base",
+    "version": "0.0.0",
+    "description": "Base eslint config",
+    "keywords": [
+        "eslint"
+    ],
+    "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-configs/packages/eslint-config-base#readme",
+    "license": "MIT",
+    "main": "lib/eslint-config-base.js",
+    "files": [
+        ""
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jagretz/web-configs/packages/eslint-config-base.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: run tests from root\" && exit 1"
+    },
+    "bugs": {
+        "url": "https://github.com/jagretz/web-configs/issues"
+    },
+    "devDependencies": {
+        "babel-eslint": "^10.0.1"
+    }
 }
