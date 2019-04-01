@@ -326,17 +326,17 @@ Complete
 
 In Progress
 
-- [ ] Add / update js docs
-
+- [ ] integration testing
 
 Ready for Development
 
+- [ ] Add / update js docs
 - [ ] Update package.json scripts
 - [ ] Remove bogus comments
 - [x] test that the cli runs on windows
 - [ ] test that the cli runs on osx
 - [ ] Add error handling
-- [ ] Add logging
+- [ ] Add log statements
 - [ ] Add testing
 - [ ] Add / update project documentation
 - [ ] Publish to npm

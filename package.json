@@ -3,6 +3,7 @@
     "description": "A monorepo of linter and formatter configurations for browser-based web projects",
     "author": "jagretz <jagretz@gmail.com>",
     "private": false,
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "git@github.com:jagretz/web-configs.git"
@@ -12,6 +13,8 @@
         "registry": "https://registry.npmjs.org/"
     },
     "scripts": {
+        "bootstrap": "lerna bootstrap --hoist",
+        "eslint": "eslint ./",
         "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
     },
     "keywords": [
@@ -21,8 +24,9 @@
         "prettier",
         "editorconfig"
     ],
-    "dependencies": {},
     "devDependencies": {
-        "lerna": "^3.10.6"
+        "eslint": "^5.16.0",
+        "lerna": "^3.10.6",
+        "prettier": "^1.17.0"
     }
 }
