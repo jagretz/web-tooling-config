@@ -26,6 +26,7 @@
         "url": "https://github.com/jagretz/web-configs/issues"
     },
     "devDependencies": {
-        "@jagretz/eslint-config-base": "0.0.1"
+        "eslint-config-react": "^1.1.7",
+        "eslint-plugin-jsx-a11y": "^6.2.1"
     }
 }

@@ -25,7 +25,8 @@
     "bugs": {
         "url": "https://github.com/jagretz/web-configs/issues"
     },
-    "devDependencies": {
+    "devDependencies": {},
+    "dependencies": {
         "babel-eslint": "^10.0.1"
     }
 }

@@ -8,7 +8,6 @@
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-configs/packages/prettier-config#readme",
     "license": "MIT",
-    "main": "lib/prettier.js",
     "files": [
         ".prettierrc"
     ],
@@ -24,5 +23,8 @@
     },
     "bugs": {
         "url": "https://github.com/jagretz/web-configs/issues"
+    },
+    "devDependencies": {
+        "prettier": "^1.17.0"
     }
 }
