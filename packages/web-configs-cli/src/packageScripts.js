@@ -5,10 +5,7 @@
  * of `package.json`.
  */
 
-//  ! this is duplicated in the `cli.js` & packageSources.js.
-//  ! only temporarily until we find it's rightful home
-//  import { NODE } from
-const NODE = "node";
+const { NODE } = require("./projectTypes");
 
 /**
  * `package.scripts` common to any javascript project.

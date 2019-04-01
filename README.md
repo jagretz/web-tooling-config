@@ -12,4 +12,3 @@ A monorepo of linter and formatter configurations for browser-based web projects
 - formatters
   - editorconfig
   - prettier
-  

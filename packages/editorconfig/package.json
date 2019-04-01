@@ -1,28 +1,28 @@
 {
-  "name": "@jagretz/editorconfig",
-  "version": "0.0.0",
-  "description": "Editorconfig",
-  "keywords": [
-    "editorconfig"
-  ],
-  "author": "jagretz <jagretz@gmail.com>",
-  "homepage": "https://github.com/jagretz/web-configspackages/editorconfig#readme",
-  "license": "MIT",
-  "main": "lib/editorconfig.js",
-  "files": [
-    ""
-  ],
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jagretz/web-configs.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1"
-  },
-  "bugs": {
-    "url": "https://github.com/jagretz/web-configs/issues"
-  }
+    "name": "@jagretz/editorconfig",
+    "version": "0.0.0",
+    "description": "Editorconfig",
+    "keywords": [
+        "editorconfig"
+    ],
+    "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-configspackages/editorconfig#readme",
+    "license": "MIT",
+    "main": "lib/editorconfig.js",
+    "files": [
+        ""
+    ],
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jagretz/web-configs.git"
+    },
+    "scripts": {
+        "test": "echo \"Error: run tests from root\" && exit 1"
+    },
+    "bugs": {
+        "url": "https://github.com/jagretz/web-configs/issues"
+    }
 }

@@ -1,17 +1,17 @@
 const fs = require("fs");
 const path = require("path");
-// /** @see [child_process]{@link https://nodejs.org/api/child_process.html#child_process_child_process} */
-const { spawn } = require("child_process");
 /** @see [promisify]{@link https://nodejs.org/dist/latest-v8.x/docs/api/util.html#util_util_promisify_original} */
 const { promisify } = require("util");
 /** @see [enquirer]{@link https://www.npmjs.com/package/enquirer} */
 const { prompt } = require("enquirer");
 const chalk = require("chalk");
-/* custom modules / non-node modules */
+/* internal dependencies */
 const logger = require("./src/colorLog");
-const { filterPackageDependencies, safeSpawn } = require("./src/utils");
-const { getDevDependenciesByProjectType } = require("./src/packageSources");
+// const { leftOuterJoin, safeSpawn } = require("./src/utils");
+const { configFiles, overridesFiles } = require("./src/templateSources");
+const { installPackageDependencies } = require("./src/packageDependencies");
 const { getScriptsByProjectType } = require("./src/packageScripts");
+const { BROWSER, REACT, NODE } = require("./src/projectTypes");
 
 const cwd = process.cwd();
 
@@ -35,16 +35,17 @@ const writeFile = promisify(fs.writeFile);
 const statPromise = promisify(fs.stat);
 
 /**
- * This will check the install directory for an existing `.git` directory.
+ * This will check the install directory for an existing `.git` directory. If
+ * a `.git` directory does not exist, log an error and exit.
+ *
  * The reason to run this check is to prevent the end-user from unintentionally
  * mixing in changes made from _this_ application with uncommitted changes
  * in their project.
  *
- * Exists if an error is thrown.
+ * Logs any error to stdout and exits if any error is thrown.
  *
  * @returns {Promise resolves fs.stat} no processing necessary on the Prommise
  * or the resolve to `fs.stat`. The return simple means success.
- * @throws {Error} if a `.git` directory does not exist.
  * @async
  */
 async function checkForExistingGitDirectory() {
@@ -91,9 +92,6 @@ const calculateLongestText = texts =>
 
 // const ProjectType = Object.freeze({ BROWSER: "browser", REACT: "react", NODE: "node" });
 // const longest = calculatelongestText(ProjectType).length;
-const BROWSER = "browser";
-const REACT = "react";
-const NODE = "node";
 
 // TODO: 03/16 jagretz - document
 const longest = calculateLongestText([BROWSER, REACT, NODE]).length;
@@ -149,11 +147,11 @@ const projectQuestions = {
 // const target = filename => path.join(__dirname, "templates", filename);
 const destination = filename => path.join(cwd, filename);
 
-const { configFiles, overridesFiles } = require("./src/sources");
-
 /**
  * Looks at the directory of the cli for a `templates`
  * directory to read files by #filename from.
+ *
+ * On Error, logs and re-throws.
  *
  * @param {string} filename the name of the file to read.
  * @returns {Promise}
@@ -177,8 +175,9 @@ async function safeReadFile(filename) {
 }
 
 /**
- * Looks at the directory where the cli was invoked
- * to write a file.
+ * Looks at the directory where the cli was invoked to write a file.
+ *
+ * On Error, logs and re-throws.
  *
  * This will create a new file with the name of #filename or overwrite a file
  * with the same name if one already exists.
@@ -238,7 +237,7 @@ async function createFiles(filenames) {
     return await Promise.all(
         filenames.map(async filename => {
             /*
-            The use of `fs.stat` to check if a file exists is _NOT_ recommmended.
+            The use of `fs.stat` to check if a file exists is _NOT_ recommended.
             @see [fs.stat]{@link https://nodejs.org/api/fs.html#fs_fs_stat_path_options_callback}
             */
             const fileExists = await safeWriteFile(filename, fileContents, {
@@ -251,24 +250,12 @@ async function createFiles(filenames) {
     );
 }
 
-// FIXME: 03/16 jagretz - this does not appear to be used anymore.
-function spawnNpmProcess() {
-    return spawn(
-        process.platform === "win32" ? "npm.cmd" : "npm",
-        // testing... comment / uncomment lines to test.
-        // ["install", "husky", "jagretz"],
-        ["install", "--save-dev", "husky"],
-        {
-            stdio: "inherit"
-        }
-    );
-}
-
 /**
  * Entry point of the CLI.
  * @async
  */
 async function run() {
+    console.log("cwd", process.cwd());
     await checkForExistingGitDirectory();
 
     welcomeMessage();
@@ -293,37 +280,16 @@ async function run() {
     logger.success("Created web-config files successfully!");
     logger.log("WIP: Gathering necessary package dependencies");
 
-    // read the isntall locations package.json
+    // read the install locations package.json
     const projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
 
     // TODO: 03/16 jagretz - can likely be abstracted as a separate step
     // * this is the install step
     const projectPackageJsonString = JSON.parse(projectPackageJson);
-    // console.log(
-    //     "projectPackageJsonString.devDependencies",
-    //     projectPackageJsonString.devDependencies
-    // );
 
     // Have a list a deps that are to be installed given the project.type: web, react, node, etx
-    const devDependenciesToInclude = getDevDependenciesByProjectType(project.type);
-
-    // console.log("devDependenciesToInclude", devDependenciesToInclude);
-
-    // filter only 'unique" dependencies between the dest. proj. and the list of deps
-    const devDependenciesToInstall = filterPackageDependencies(
-        devDependenciesToInclude,
-        projectPackageJsonString.devDependencies
-    );
-    console.log("Acquired devDependenciesToInstall:", devDependenciesToInstall);
-
-    /* commented out while testing other features. */
-    // install "unique" dependencies into the dest. projects (cwd) `devDependencies`.
-    // const code = await safeSpawn(spawnNpmProcess);
-    // if (code === 0) {
-    //     logger.success("Successfully installed package dependencies.");
-    // } else {
-    //     logger.error("Failed to install package dependencies.");
-    // }
+    // temp comment out to save on testing time and pointing to the correct registry (.npmrc )
+    // await installPackageDependencies(project.type, projectPackageJsonString.devDependencies);
 
     // TODO: 03/16 jagretz - can likely be abstracted as a separate step
     // * this is the overwrite `scripts` step
@@ -335,7 +301,7 @@ async function run() {
     const updatedPackageJson = JSON.stringify({ ...projectPackageJsonString, ...{ scripts } });
 
     // overwrite package.json... it's not _that_ large of a file so I am not
-    // too concerned about memory consumtion or performance with this.
+    // too concerned about memory consumption or performance with this.
     await safeWriteFile("package.json", updatedPackageJson);
 
     logger.success("Work Complete!");
@@ -354,7 +320,7 @@ Complete
 - [x] try just reading in a single file for now
 - [x] copy files into repository (install dir)
 - [x] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
-- [x] merge into package.json `devDpendencies` with matching keys
+- [x] merge into package.json `devDependencies` with matching keys
 - [x] Install package dependencies
 - [x] merge into package.json `scripts` with matching keys
 

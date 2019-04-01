@@ -1,12 +1,14 @@
-/**
- * All formatting rRule should be managed by prettier. We turn off multiple eslint rules
- * in order to remove conflicts with prettier rules.
- */
 module.exports = {
-    env: { browser: true },
-    parserOptions: {
-        ecmaVersion: 9
+    env: {
+        es6: true,
+        node: true
     },
+    parserOptions: {
+        ecmaVersion: 9,
+        sourceType: "module"
+    },
+    parser: "babel-eslint",
+    extends: [],
     rules: {
         "constructor-super": 2,
         "no-cond-assign": 2,

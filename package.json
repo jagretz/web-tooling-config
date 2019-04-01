@@ -11,7 +11,9 @@
         "access": "public",
         "registry": "https://registry.npmjs.org/"
     },
-    "scripts": {},
+    "scripts": {
+        "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
+    },
     "keywords": [
         "lerna",
         "eslint",
