@@ -1,6 +1,6 @@
 {
     "name": "@jagretz/prettier-config",
-    "version": "0.0.0",
+    "version": "0.1.1-alpha.0",
     "description": "Prettier config for code formatting",
     "keywords": [
         "prettier"
