@@ -1,6 +1,9 @@
 {
     "name": "@jagretz/editorconfig",
-    "version": "0.1.1-alpha.0",
+    "version": "0.1.0-alpha.1",
+    "publishConfig": {
+        "access": "public"
+    },
     "description": "Editorconfig",
     "keywords": [
         "editorconfig"
@@ -11,18 +14,5 @@
     "main": ".editorconfig",
     "files": [
         ".editorconfig"
-    ],
-    "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/jagretz/web-configs.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: run tests from root\" && exit 1"
-    },
-    "bugs": {
-        "url": "https://github.com/jagretz/web-configs/issues"
-    }
+    ]
 }
