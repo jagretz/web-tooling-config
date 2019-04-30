@@ -11,16 +11,15 @@ const { NODE } = require("./projectTypes");
  * `package.scripts` common to any javascript project.
  */
 const scripts = {
-    precommit: "",
     eslint: "eslint ./",
-    prettier: "prettier ./"
+    prettier: 'prettier --write "./**/*.{js,jsx,css,scss,html,json,md,mdx}"'
 };
 
 /**
  * `package.scripts` specific to browser-based projects.
  */
 const browserScripts = {
-    stylelint: "stylelint ./"
+    stylelint: 'stylelint "./**/*.{css,scss}"'
 };
 
 /**

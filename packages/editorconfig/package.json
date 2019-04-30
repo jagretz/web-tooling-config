@@ -8,9 +8,9 @@
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-configspackages/editorconfig#readme",
     "license": "MIT",
-    "main": "lib/editorconfig.js",
+    "main": ".editorconfig",
     "files": [
-        ""
+        ".editorconfig"
     ],
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"

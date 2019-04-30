@@ -9,8 +9,9 @@
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-configs/packages/eslint-config-react#readme",
     "license": "MIT",
+    "main": "eslint-react.js",
     "files": [
-        ""
+        "eslint-react.js"
     ],
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const { exec } = require("child_process");
 /** @see [promisify]{@link https://nodejs.org/dist/latest-v8.x/docs/api/util.html#util_util_promisify_original} */
 const { promisify } = require("util");
 /** @see [enquirer]{@link https://www.npmjs.com/package/enquirer} */
@@ -34,6 +35,8 @@ const writeFile = promisify(fs.writeFile);
  */
 const statPromise = promisify(fs.stat);
 
+const execPromise = promisify(exec);
+
 /**
  * This will check the install directory for an existing `.git` directory. If
  * a `.git` directory does not exist, log an error and exit.
@@ -49,10 +52,8 @@ const statPromise = promisify(fs.stat);
  * @async
  */
 async function checkForExistingGitDirectory() {
-    // let stats;
     try {
         return await statPromise(path.join(cwd, ".git"));
-        // console.log(`Success! ${stats}`);
     } catch (error) {
         if (error.code === "ENOENT" && error.path.endsWith(".git")) {
             /*
@@ -69,6 +70,21 @@ async function checkForExistingGitDirectory() {
         } else {
             console.error("Problem detected:\n", error);
         }
+        process.exit();
+    }
+}
+
+async function checkForCleanGitDirectory() {
+    try {
+        const { stdout, stderr } = await execPromise("git status --porcelain");
+        if (!!stdout || !!stderr) {
+            logger.error(
+                `Git directory not clean. Please remove or commit changes before continuing.`
+            );
+            process.exit();
+        }
+    } catch (error) {
+        console.error("Problem detected:\n", error);
         process.exit();
     }
 }
@@ -255,8 +271,9 @@ async function createFiles(filenames) {
  * @async
  */
 async function run() {
-    console.log("cwd", process.cwd());
+    // console.log("cwd", process.cwd());
     await checkForExistingGitDirectory();
+    await checkForCleanGitDirectory();
 
     welcomeMessage();
 
@@ -267,8 +284,11 @@ async function run() {
     const project = await prompt(projectQuestions);
 
     /* Repeat users choice back to them. */
-
     logger.log(`Setting up project with the ${chalk.underline(project.type)} configs`);
+
+    // TODO: 04/30 jagretz - if the project is not the default (browser)
+    // then merge configs based on the project type.
+    // if (project !== BROWSER) { }
 
     /* copy (read/write) all template files */
     await copyFiles(path.join(__dirname, "templates"), configFiles);
@@ -293,7 +313,7 @@ async function run() {
 
     // TODO: 03/16 jagretz - can likely be abstracted as a separate step
     // * this is the overwrite `scripts` step
-    // overwrite scripts -- sarz bro :D
+    // overwrite scripts package.scripts. The git-diff can be used to "undo" changes
     const scripts = {
         ...projectPackageJsonString.scripts,
         ...getScriptsByProjectType(project.type)
