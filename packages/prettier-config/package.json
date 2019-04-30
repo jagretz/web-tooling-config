@@ -1,6 +1,9 @@
 {
     "name": "@jagretz/prettier-config",
-    "version": "0.1.1-alpha.0",
+    "version": "0.1.0-alpha.1",
+    "publishConfig": {
+        "access": "public"
+    },
     "description": "Prettier config for code formatting",
     "keywords": [
         "prettier"
@@ -13,19 +16,6 @@
         ".prettierrc.js",
         ".prettierignore"
     ],
-    "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/jagretz/web-configs.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: run tests from root\" && exit 1"
-    },
-    "bugs": {
-        "url": "https://github.com/jagretz/web-configs/issues"
-    },
     "devDependencies": {
         "prettier": "^1.17.0"
     }
