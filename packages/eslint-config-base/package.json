@@ -8,9 +8,10 @@
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-configs/packages/eslint-config-base#readme",
     "license": "MIT",
-    "main": "lib/eslint-config-base.js",
+    "main": "eslint-base.js",
     "files": [
-        ""
+        "eslint-base.js",
+        ".eslintignore"
     ],
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"

@@ -8,8 +8,10 @@
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-configs/packages/prettier-config#readme",
     "license": "MIT",
+    "main": ".prettierrc.js",
     "files": [
-        ".prettierrc"
+        ".prettierrc.js",
+        ".prettierignore"
     ],
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"

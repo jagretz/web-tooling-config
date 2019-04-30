@@ -10,13 +10,13 @@
 const configFiles = [
     /* formatters */
     ".editorconfig",
-    ".prettierrc",
+    ".prettierrc.js",
     ".prettierignore",
     /* linters - Javascript */
-    ".eslintrc",
+    ".eslintrc.js",
     ".eslintignore",
     /* linters - CSS */
-    ".stylelintrc",
+    ".stylelintrc.js",
     ".stylelintignore",
     /* Project config files */
     ".gitignore"
@@ -41,9 +41,9 @@ const overridesFiles = ["eslint-overrides.js", "stylelint-overides.js"];
 const base = [
     { source: ".gitignore", destination: ".gitignore" },
     { source: ".editorconfig", destination: ".editorconfig" },
-    { source: ".prettierrc", destination: ".prettierrc" },
+    { source: ".prettierrc.js", destination: ".prettierrc.js" },
     { source: ".prettierignore", destination: ".prettierignore" },
-    { source: "eslint-config-base", destination: ".eslintrc" },
+    { source: "eslint-config-base.js", destination: ".eslintrc.js" },
     { source: "eslint-overrides.js", destination: "eslint-overrides.js" },
     { source: ".eslintignore", destination: ".eslintignore" }
 ];
@@ -55,7 +55,7 @@ const base = [
  * @prop {string} destination name of the file to write
  */
 const browser = [
-    { source: ".stylelintrc", destination: ".stylelintrc" },
+    { source: ".stylelintrc.js", destination: ".stylelintrc.js" },
     { source: "stylelint-overrides.js", destination: "stylelint-overrides.js" },
     { source: ".stylintignore", destination: ".stylintignore" }
 ];
@@ -66,7 +66,7 @@ const browser = [
  * @prop {string} source name of the file to read
  * @prop {string} destination name of the file to write
  */
-const react = [{ source: "eslint-config-react", destination: ".eslintrc" }];
+const react = [{ source: "eslint-react.js", destination: ".eslintrc.js" }];
 
 /**
  * Files specific to node environments.

@@ -8,8 +8,10 @@
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-configs/packages/stylelint-config#readme",
     "license": "MIT",
+    "main": ".stylelintrc.js",
     "files": [
-        ""
+        ".stylelintrc.js",
+        ".stylelintignore"
     ],
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
