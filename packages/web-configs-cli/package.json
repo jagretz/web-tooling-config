@@ -11,7 +11,6 @@
     ],
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-configs/packages/web-configs-cli#readme",
-    "main": "cli.js",
     "bin": "cli.js",
     "files": [
         "cli.js",
