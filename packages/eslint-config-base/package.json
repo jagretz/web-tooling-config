@@ -1,6 +1,9 @@
 {
     "name": "@jagretz/eslint-config-base",
-    "version": "0.1.1-alpha.0",
+    "version": "0.1.1-alpha.3",
+    "publishConfig": {
+        "access": "public"
+    },
     "description": "Base eslint config",
     "keywords": [
         "eslint"
@@ -13,20 +16,7 @@
         "eslint-base.js",
         ".eslintignore"
     ],
-    "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/jagretz/web-configs/packages/eslint-config-base.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: run tests from root\" && exit 1"
-    },
-    "bugs": {
-        "url": "https://github.com/jagretz/web-configs/issues"
-    },
-    "dependencies": {
+    "devDependencies": {
         "babel-eslint": "^10.0.1"
     }
 }

@@ -1,6 +1,9 @@
 {
     "name": "@jagretz/stylelint-config",
-    "version": "0.1.1-alpha.0",
+    "version": "0.1.1-alpha.3",
+    "publishConfig": {
+        "access": "public"
+    },
     "description": "Base stylelint config",
     "keywords": [
         "stylelint"
@@ -13,19 +16,6 @@
         ".stylelintrc.js",
         ".stylelintignore"
     ],
-    "publishConfig": {
-        "registry": "https://registry.npmjs.org/"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/jagretz/web-configs.git"
-    },
-    "scripts": {
-        "test": "echo \"Error: run tests from root\" && exit 1"
-    },
-    "bugs": {
-        "url": "https://github.com/jagretz/web-configs/issues"
-    },
     "devDependencies": {
         "stylelint": "^10.0.1",
         "stylelint-config-recommended-scss": "^3.3.0",
