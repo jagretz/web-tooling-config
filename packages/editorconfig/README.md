@@ -1,3 +1,5 @@
-# `editorconfig`
+Simple, sensible configuration.
 
-> TODO: description
+# editorconfig
+
+😄 Zero dependencies

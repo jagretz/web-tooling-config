@@ -1,67 +1,134 @@
+Configure and install common project dependencies.
+
 # `web-configs-cli`
 
-[configuring eslint](https://eslint.org/docs/user-guide/configuring)
+- [`web-configs-cli`](#web-configs-cli)
+  - [What and Why](#what-and-why)
+  - [Use / Install](#use--install)
+    - [Customizations and Overrides](#customizations-and-overrides)
+    - [Updating Existing Projects](#updating-existing-projects)
+  - [What gets Installed](#what-gets-installed)
+  - [Troubleshooting](#troubleshooting)
+    - [Registry](#registry)
+  - [Contributing](#contributing)
+  - [License](#license)
 
-> TODO: description
+## What and Why
 
-## Install
+This library will setup your project with a set of tooling configurations,
+package scripts, and installs any missing package dependencies.
 
-## Usage & Customizations
+The configurations provided are intended to be used as is but does also provide
+you a way to [override](#customizations-and-overrides) any undesired settings.
 
-### Overriding the default configuration
+**Why?**
 
-For example, maybe you want to specify another (such as `jasmine`)
-[environemnt](https://eslint.org/docs/user-guide/configuring#specifying-environments)
-or
-[custom globals](https://eslint.org/docs/user-guide/configuring#specifying-globals)
+There are a lot of opinions, suggestions, and other bikeshedding around project
+configurations, linter settings and format settings. Why fuss over something so
+trivial to final project?
 
-Or use
-[configuration cascade](https://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy)
+Instead of worrying about 2-space indentation over tabs, `.*` extensions, or
+whether the linter should throw an error if someone forgets to add a new line
+between functions. This cli sets up all that for you with a set of sensible
+defaults.
+
+## Use / Install
+
+Great news! You don't need to install this library (locally or globally).
+Instead use `npx` to run the cli.
+
+```bash
+npx @jagretz/web-configs-cli
+```
+
+When the process spins up you have a very simple choice to make:
+
+> what type of project do you want to configure?
+>
+> - browser
+> - react
+> - node
+
+Make your selection and the rest is history.
+
+**But don't Change "x"!**
+
+If you don't want all the changes provided by this library that is OK.
+
+The cli requires a clean git working directory. This allows you to easily pick
+or undo changes made by this tool that you might not want added to your project.
+
+### Customizations and Overrides
+
+This package is intended to use "as is"; an out-of-the-box solution to
+configuring your project with common dependencies. Therefore, it isn't intended
+for any particular project to modify default configurations directly.
+
+However, if the need arises, the default set of configurations provide an
+`*-overrides` file for overriding linter configurations. Both an
+`eslint-overrides.js` and a `stylelint-overrides.js` are provided for your use
+and customization
+
+### Updating Existing Projects
+
+Simply re-run the [cli](#use). It will override everything but `*-overrides`
+files. This allows your customizations to be retained on any subsequent updates.
 
 ## What gets Installed
 
-"extends": [ "eslint:recommended",
+The CLI will configure your project with as one of three types:
 
-List deps here...
+1. Browser
+2. React
+3. Node
 
-[eslint-plugin-react](https://www.npmjs.com/package/eslint-plugin-react)
+**For all projects:**
 
-[eslint-plugin-jsx-a11y](https://github.com/evcohen/eslint-plugin-jsx-a11y)
+- eslint
+- prettier
+- lint-staged
 
-## Customizations
+**Browser-specific**
 
-## How it works
+Everything from "all projects" along with:
 
-Naming of packages `eslint-config`
-https://eslint.org/docs/user-guide/configuring#using-a-shareable-configuration-package
+- stylelint
 
-## Life Choices
+**React-specific**
 
-The packages have no deps. They don't need them since they are supposed to be
-used with the cli, not as stand alone packages.
+Everything from "browser-specific" along with:
 
-### Eslint Configuration
+- react-specific eslint plugins
 
-`env` es6, jest, react, node, etc. You can specify multip
+**Node-specific**
 
-`parser` [babel-eslint](https://www.npmjs.com/package/babel-eslint)
+Everything from "all projects" along with:
 
-> To use experimental features not supported in ESLint itself yet.
-
-`ecmaVersion` latest or 2019. Same reason for the choice in a parser.
-
-> supporting ES6 syntax is not the same as supporting new ES6 globals
-
-`ecmaFeatures`
-
-    `jsx`
-
-    > supporting JSX syntax is not the same as supporting React.
-
-`plugins` react
+- eslint settings for node environments
 
 ## Troubleshooting
 
+### Registry
+
+If most of your downloads are hosted on a registry that isn't `npm`, you may
+have to create a separate `.npmrc`. Most of the time you can just manage your
+registry (or have your dev-ops team) to download and host this package. However,
+in cases where you can't, you may run into issue. Here is the solution.
+
+Create a `.npmrc` file that points to the npm registry. Then when invoking npx,
+point to that `.npmrc`. It doesn't matter where you put this file or even what
+you name it. But in this example we use the same name, `.npmrc` and drop it
+under a custom directory.
+
+```bash
+npx --userconfig C:/w/git/.npmrc  @jagretz/web-configs-cli
+```
+
 ## Contributing
 
+More on this later. For now, either create an issue explaining the feature and
+why.
+
 ## License
+
+Refer to [LICENSE](./LICENSE)

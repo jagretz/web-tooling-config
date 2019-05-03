@@ -1,5 +1,9 @@
- module.exports = {
-    env: { browser: true, jest: true },
+/**
+ * All formatting rRule should be managed by prettier. We turn off multiple eslint rules
+ * in order to remove conflicts with prettier rules.
+ */
+module.exports = {
+    env: { es6: true, browser: true, node: true, jest: true },
     parserOptions: {
         ecmaVersion: 9,
         sourceType: "module"

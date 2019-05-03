@@ -1,3 +1,5 @@
-# `prettier-config`
+Simple, sensible configuration.
 
-> TODO: description
+# prettier-config
+
+😄 Zero dependencies

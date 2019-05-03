@@ -1,5 +1,7 @@
-# `eslint-config-base`
+Simple, sensible eslint configuration.
 
-> TODO: description
+# eslint-config-base
 
-## Usage
+Disregards any setting that touch code format (format is up to you).
+
+😄 Zero dependencies

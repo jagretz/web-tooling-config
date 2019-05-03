@@ -14,8 +14,9 @@
         "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
     },
     "devDependencies": {
+        "babel-eslint": "^10.0.1",
         "eslint": "^5.16.0",
-        "lerna": "^3.10.6",
+        "lerna": "^3.13.4",
         "prettier": "^1.17.0"
     }
 }
