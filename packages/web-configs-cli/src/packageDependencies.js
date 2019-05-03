@@ -7,7 +7,7 @@
 /** @see [child_process]{@link https://nodejs.org/api/child_process.html#child_process_child_process} */
 const { spawn } = require("child_process");
 const logger = require("./colorLog");
-const { leftOuterJoin, safeSpawn } = require("./utils");
+const { safeSpawn } = require("./utils");
 const { BROWSER, REACT, NODE } = require("./projectTypes");
 
 /**
@@ -16,13 +16,18 @@ const { BROWSER, REACT, NODE } = require("./projectTypes");
  *
  * @type {Array.<string>}
  */
-const projectDependencies = [
-    "husky",
-    "lint-staged",
-    "eslint",
+const projectDependencies = ["eslint", "prettier", "husky", "lint-staged"];
+
+/**
+ * `package.devDependencies` that are to be installed into the destination
+ * project. Specific to any project that wants to use css.
+ *
+ * @type {Array.<string>}
+ */
+const stylesProjectDependencies = [
     "stylelint",
-    "prettier",
-    "eslint-config-prettier"
+    "stylelint-config-recommended-scss",
+    "stylelint-scss"
 ];
 
 /**
@@ -31,7 +36,7 @@ const projectDependencies = [
  *
  * @type {Array.<string>}
  */
-const browserProjectDependencies = ["@jagretz/eslint-config-base"];
+const browserProjectDependencies = [...stylesProjectDependencies];
 
 /**
  * `package.devDependencies` that are to be installed into the destination
@@ -39,16 +44,44 @@ const browserProjectDependencies = ["@jagretz/eslint-config-base"];
  *
  * @type {Array.<string>}
  */
-const reactProjectDependencies = ["@jagretz/eslint-config-react"];
+const reactProjectDependencies = [
+    "@jagretz/eslint-config-base",
+    "eslint-plugin-react",
+    "eslint-plugin-jsx-a11y",
+    ...stylesProjectDependencies
+];
 
+/**
+ * `package.devDependencies` that are to be installed into the destination
+ * project. Specific to node-based projects.
+ *
+ * @type {Array.<string>}
+ */
+const nodeProjectDependencies = [];
+
+/**
+ *
+ * @param {string} type the project type matching
+ * @returns {Array.<string>} array of strings representing the project
+ * devDependencies that should be installed.
+ */
 const getDevDependenciesByProjectType = type => {
-    return projectDependencies.concat(
-        type === BROWSER ? browserProjectDependencies : [],
-        type === NODE ? browserProjectDependencies : [],
-        type === REACT ? browserProjectDependencies.concat(reactProjectDependencies) : []
-    );
+    return [
+        ...projectDependencies,
+        ...(type === NODE ? nodeProjectDependencies : []),
+        ...(type === BROWSER ? browserProjectDependencies : []),
+        ...(type === REACT ? reactProjectDependencies : [])
+    ];
 };
 
+/**
+ * Installs package dependencies that are not already included in the package.json
+ * of the target package.
+ *
+ * @param {string} projectType
+ * @param {object} packageDevDependencies same structure as a `package.json`s
+ * `devDependencies` structure. ie { "name-of-package" : "^0.1.0" }
+ */
 async function installPackageDependencies(projectType, packageDevDependencies) {
     const dependenciesByProjectType = getDevDependenciesByProjectType(projectType);
     const devDependenciesToInstall = leftOuterJoin(
@@ -56,8 +89,7 @@ async function installPackageDependencies(projectType, packageDevDependencies) {
         packageDevDependencies
     );
 
-    // const responseCode = await safeSpawn(spawnNpmProcess(devDependenciesToInstall));
-    const responseCode = await safeSpawn(spawnNpmProcess);
+    const responseCode = await safeSpawn(spawnNpmProcess.bind(null, devDependenciesToInstall));
 
     if (responseCode === 0) {
         logger.success("Successfully installed package dependencies.");
@@ -66,13 +98,42 @@ async function installPackageDependencies(projectType, packageDevDependencies) {
     }
 }
 
+/**
+ * Take only packages in the left that do not exist in the right; the left difference.
+ *
+ * @param {Array.<string>} projectDependencies prospective dependencies
+ * @param {Array.<object>} packageJson same structure as a `package.json`s
+ * `devDependencies` structure. ie { "name-of-package" : "^0.1.0" }
+ * @returns {Array.<string>} array of string names for the dependencies.
+ */
+function leftOuterJoin(projectDependencies, packageJson) {
+    // return the devDeps to be installed ONLY if they don't already
+    // exist in the destination projects devDeps.
+
+    // perf is not a big deal here considering how few items we are
+    // looping through, however, performance improvements can be future feature 👍
+    return projectDependencies.reduce((accum, curr) => {
+        if (Reflect.has(packageJson, curr)) {
+            return accum;
+        }
+
+        accum.push(curr);
+        return accum;
+    }, []);
+}
+
+/**
+ * Spawns a new npm process that considers the OS.
+ * Installs, package deps as `devDependencies`.
+ * @param {Array.<string>} dependencies list of string names for npm any
+ * dependencies to be installed.
+ * @returns {ChildProcess} the spawned process
+ */
 function spawnNpmProcess(dependencies) {
     return spawn(
         process.platform === "win32" ? "npm.cmd" : "npm",
-        // testing... comment / uncomment lines to test.
-        // ["install", "husky", "jagretz"],
         // destructure dependencies here
-        ["install", "--save-dev", "husky"],
+        ["install", "--save-dev", ...dependencies],
         {
             stdio: "inherit"
         }

@@ -4,23 +4,6 @@
  * @desc Exports general use-case utilities for the cli and all modules.
  */
 
-// * filters the cw package devDeps by the project type.
-async function leftOuterJoin(projectDependencies, packageJson) {
-    // return the devDeps to be installed ONLY if they don't already
-    // exist in the destination projects devDeps.
-
-    // perf is not a big deal here considering how few items we are
-    // looping through, however, performance improvements can be future feature 👍
-    return projectDependencies.reduce((accum, curr) => {
-        if (Reflect.has(packageJson, curr)) {
-            return accum;
-        }
-
-        accum.push(curr);
-        return accum;
-    }, []);
-}
-
 /*
 Why we use `child_process.spawn` over `child_process.exec`:
 
@@ -53,7 +36,7 @@ async function safeSpawn(spawnNpmProcess) {
 }
 
 /**
- * Wraps `spawn` in a promise.
+ * Wraps `spawn` in a `Promise`.
  * @returns {Promise} wrapping `spawn`.
  */
 function spawnAsPromise(invokeProcess) {
@@ -77,9 +60,6 @@ function spawnAsPromise(invokeProcess) {
     });
 }
 
-function mergePackageScripts() {}
-
 module.exports = {
-    leftOuterJoin,
     safeSpawn
 };

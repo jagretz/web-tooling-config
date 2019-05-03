@@ -15,8 +15,5 @@
     "files": [
         "eslint-base.js",
         ".eslintignore"
-    ],
-    "devDependencies": {
-        "babel-eslint": "^10.0.1"
-    }
+    ]
 }

@@ -15,10 +15,5 @@
     "files": [
         ".stylelintrc.js",
         ".stylelintignore"
-    ],
-    "devDependencies": {
-        "stylelint": "^10.0.1",
-        "stylelint-config-recommended-scss": "^3.3.0",
-        "stylelint-scss": "^3.6.0"
-    }
+    ]
 }

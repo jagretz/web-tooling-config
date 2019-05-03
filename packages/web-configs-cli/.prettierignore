@@ -1,5 +1,5 @@
 node_modules
-build
-coverage
 dist
+build
 target
+coverage

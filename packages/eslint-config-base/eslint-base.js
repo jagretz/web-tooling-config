@@ -3,11 +3,13 @@
  * in order to remove conflicts with prettier rules.
  */
 module.exports = {
-    env: { browser: true, jest: true },
+    env: { es6: true, browser: true, node: true, jest: true },
     parserOptions: {
         ecmaVersion: 9,
         sourceType: "module"
     },
+    // > To use experimental features not supported in ESLint itself yet.
+    parser: "babel-eslint",
     rules: {
         "constructor-super": 2,
         "no-cond-assign": 2,

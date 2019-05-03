@@ -9,8 +9,7 @@ const { prompt } = require("enquirer");
 const chalk = require("chalk");
 /* internal dependencies */
 const logger = require("./src/colorLog");
-// const { leftOuterJoin, safeSpawn } = require("./src/utils");
-const { configFiles, overridesFiles } = require("./src/templateSources");
+const { getSourcesByProjectType, overridesFiles } = require("./src/templateSources");
 const { installPackageDependencies } = require("./src/packageDependencies");
 const { getScriptsByProjectType } = require("./src/packageScripts");
 const { BROWSER, REACT, NODE } = require("./src/projectTypes");
@@ -36,6 +35,9 @@ const writeFile = promisify(fs.writeFile);
  */
 const statPromise = promisify(fs.stat);
 
+/**
+ * Wraps success callback in a `Promise`
+ */
 const execPromise = promisify(exec);
 
 /**
@@ -98,22 +100,26 @@ function welcomeMessage() {
 }
 
 /**
- *
- * @param {array<string>} texts
+ * Compare and return the longest string in a array.
+ * @param {array<string>} texts array of strings to compare lengths of
+ * @return {string} the string value of the longest given string
  */
-// TODO: 03/16 jagretz - document
 const calculateLongestText = texts =>
     Object.values(texts).reduce((longest, current) =>
         current.length > longest ? current : longest
     );
 
-// const ProjectType = Object.freeze({ BROWSER: "browser", REACT: "react", NODE: "node" });
-// const longest = calculatelongestText(ProjectType).length;
-
-// TODO: 03/16 jagretz - document
+/**
+ * @type {integer} the number of characters of the longest string among those checked.
+ */
 const longest = calculateLongestText([BROWSER, REACT, NODE]).length;
 
-// TODO: 03/16 jagretz - document
+/**
+ * Return a function that will pad the start of a string with whitespace equal
+ * to the length of the string + #longest less the length of the string
+ * @param {integer} longest
+ * @returns {function} that pads the start of a string with whitespace.
+ */
 function formatHint(longest) {
     /**
      * Pad the start of the `hint` with the whitespace equal to the length
@@ -132,6 +138,10 @@ function formatHint(longest) {
         return `${hint.padStart(hint.length + longest - name.length)}`;
     };
 }
+
+/**
+ * Pad the start of a string with whitespace.
+ */
 const padHint = formatHint(longest);
 
 /**
@@ -160,8 +170,11 @@ const projectQuestions = {
         }
     ]
 };
-// TODO: 03/16 jagretz - document
-// const target = filename => path.join(__dirname, "templates", filename);
+
+/**
+ * @param {string} filename string name of the file.
+ * @return {string} fully-qualified destination
+ */
 const destination = filename => path.join(cwd, filename);
 
 /**
@@ -179,8 +192,6 @@ async function safeReadFile(filename) {
     try {
         return await readFile(filename);
     } catch (error) {
-        const dir = path.join(__dirname, "templates");
-
         if (error.code === "ENOENT") {
             logger.warn(`No such file "${filename}". Skipping file.`);
             return true;
@@ -229,17 +240,18 @@ async function safeWriteFile(filename, ...rest) {
  */
 async function copyFiles(pathname, filenames) {
     return Promise.all(
-        filenames.map(async filename => {
-            logger.log(`Processing ${chalk.cyan(filename)}`);
+        filenames.map(async ({ source, destination }) => {
+            logger.log(`Processing ${chalk.cyan(destination)}`);
 
-            const file = await safeReadFile(path.join(pathname, filename));
-            await safeWriteFile(filename, file, { flag: "w" });
+            const file = await safeReadFile(path.join(pathname, source));
+            await safeWriteFile(destination, file, { flag: "w" });
 
-            logger.log(`Copied ${chalk.cyan(filename)}`);
+            logger.log(`Copied ${chalk.cyan(destination)}`);
         })
     );
 }
 
+// declared external to the function where it is used to avoid re-creation.
 const fileContents = "module.exports = {}";
 
 /**
@@ -251,7 +263,7 @@ const fileContents = "module.exports = {}";
  * @async
  */
 async function createFiles(filenames) {
-    return await Promise.all(
+    return Promise.all(
         filenames.map(async filename => {
             /*
             The use of `fs.stat` to check if a file exists is _NOT_ recommended.
@@ -272,7 +284,6 @@ async function createFiles(filenames) {
  * @async
  */
 async function run() {
-    // console.log("cwd", process.cwd());
     await checkForExistingGitDirectory();
     await checkForCleanGitDirectory();
 
@@ -283,16 +294,16 @@ async function run() {
      * @return {object} the users selection (answer)
      */
     const project = await prompt(projectQuestions);
+    const type = project.type;
 
     /* Repeat users choice back to them. */
-    logger.log(`Setting up project with the ${chalk.underline(project.type)} configs`);
+    logger.log(`Setting up project with the ${chalk.underline(type)} configs`);
 
-    // TODO: 04/30 jagretz - if the project is not the default (browser)
-    // then merge configs based on the project type.
-    // if (project !== BROWSER) { }
+    /* get templates relative to the project */
+    const templateSources = getSourcesByProjectType(type);
 
     /* copy (read/write) all template files */
-    await copyFiles(path.join(__dirname, "templates"), configFiles);
+    await copyFiles(path.join(__dirname, "templates"), templateSources);
 
     /* create the overrides template files */
     await createFiles(overridesFiles);
@@ -310,14 +321,14 @@ async function run() {
 
     // Have a list a deps that are to be installed given the project.type: web, react, node, etx
     // temp comment out to save on testing time and pointing to the correct registry (.npmrc )
-    // await installPackageDependencies(project.type, projectPackageJsonString.devDependencies);
+    await installPackageDependencies(type, projectPackageJsonString.devDependencies);
 
     // TODO: 03/16 jagretz - can likely be abstracted as a separate step
     // * this is the overwrite `scripts` step
     // overwrite scripts package.scripts. The git-diff can be used to "undo" changes
     const scripts = {
         ...projectPackageJsonString.scripts,
-        ...getScriptsByProjectType(project.type)
+        ...getScriptsByProjectType(type)
     };
     const updatedPackageJson = JSON.stringify({ ...projectPackageJsonString, ...{ scripts } });
 
@@ -330,85 +341,3 @@ async function run() {
 
 /* Invoke the script to start... */
 run();
-
-/*
-Complete
-
-- [x] start the cli...
-- [x] Prompt user before install
-- [x] Ensure a clean git directory. This will be used as a "backup".
-- [x] read in files from local directory
-- [x] try just reading in a single file for now
-- [x] copy files into repository (install dir)
-- [x] Add an eslint & stylelint overrides file _ONLY_ if one does not already exist
-- [x] merge into package.json `devDependencies` with matching keys
-- [x] Install package dependencies
-- [x] merge into package.json `scripts` with matching keys
-
-In Progress
-
-- [ ] integration testing
-
-Ready for Development
-
-- [ ] Add / update js docs
-- [ ] Update package.json scripts
-- [ ] Remove bogus comments
-- [x] test that the cli runs on windows
-- [ ] test that the cli runs on osx
-- [ ] Add error handling
-- [ ] Add log statements
-- [ ] Add testing
-- [ ] Add / update project documentation
-- [ ] Publish to npm
-- [ ] Publish as an npx script
-- [ ] Take care of the below error, "disconnected-state"
-
-
-Backlog
-
-- [ ] On build, clean `/templates` & copy configs from sister packages into `/templates`
-    - Perhaps use same read + write logic and take advantage of abstraction to use
-    in different parts of the app: build and cli
-- Add a build system to obfuscate and minify. This package is already small, but making it
-smaller makes it easier easier to publish and download from an end-user standpoint.
-- [ ] Update package dependencies to install -- currently the list is small for testing purposes.
-
-Out of Scope
-
-- [ ] Add a loading spinner for install process
-
-Other linters?
-
-- markdown https://github.com/airbnb/javascript/blob/master/linters/.markdownlint.json
-- graphql -
-
-*/
-
-/*
-Error - disconnected-state
-
-Error received on npm install
-
-Not connected to the internet
-
-web-configs | WIP: Installing package dependencies
-(node:23032) UnhandledPromiseRejectionWarning: Error: Command failed: npm install husky lint-staged
-npm WARN registry Using stale data from https://registry.npmjs.org/ because the host is inaccessible -- are you offline?
-npm WARN registry Using stale package data from https://registry.npmjs.org/ due to a request error during revalidation.
-npm ERR! code ETARGET
-npm ERR! notarget No matching version found for lint-staged@^2.3.0
-npm ERR! notarget In most cases you or one of your dependencies are requesting
-npm ERR! notarget a package version that doesn't exist.
-
-npm ERR! A complete log of this run can be found in:
-npm ERR!     C:\Users\gretzj\AppData\Roaming\npm-cache\_logs\2019-03-09T18_15_57_088Z-debug.log
-
-    at ChildProcess.exithandler (child_process.js:294:12)
-    at ChildProcess.emit (events.js:189:13)
-    at maybeClose (internal/child_process.js:970:16)
-    at Process.ChildProcess._handle.onexit (internal/child_process.js:259:5)
-(node:23032) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). (rejection id: 1)
-(node:23032) [DEP0018] DeprecationWarning: Unhandled promise rejections are deprecated. In the future, promise rejections that are not handled will terminate the Node.js process with a non-zero exit code.
-
-*/
