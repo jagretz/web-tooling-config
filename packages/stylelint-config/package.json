@@ -1,6 +1,6 @@
 {
     "name": "@jagretz/stylelint-config",
-    "version": "0.1.0-alpha.1",
+    "version": "0.1.1-alpha.2",
     "publishConfig": {
         "access": "public"
     },
@@ -16,8 +16,7 @@
         ".stylelintrc.js",
         ".stylelintignore"
     ],
-    "devDependencies": {
-        "stylelint": "^10.0.1",
+    "dependencies": {
         "stylelint-config-recommended-scss": "^3.3.0",
         "stylelint-scss": "^3.6.0"
     }

@@ -4,9 +4,6 @@ module.exports = {
         "plugin:react/recommended",
         "plugin:jsx-a11y/recommended"
     ],
-    rules: {
-        "react/jsx-filename-extension": ["error", { extensions: [".js"] }]
-    },
     parserOptions: {
         ecmaFeatures: {
             jsx: true
@@ -16,5 +13,8 @@ module.exports = {
         react: {
             version: "detect"
         }
+    },
+    rules: {
+        "react/jsx-filename-extension": ["error", { extensions: [".js"] }]
     }
 };
