@@ -16,7 +16,14 @@ const { BROWSER, REACT, NODE } = require("./projectTypes");
  *
  * @type {Array.<string>}
  */
-const projectDependencies = ["eslint", "prettier", "husky", "lint-staged"];
+const projectDependencies = [
+    "eslint",
+    "babel-eslint",
+    "@jagretz/eslint-config-base",
+    "prettier",
+    "husky",
+    "lint-staged"
+];
 
 /**
  * `package.devDependencies` that are to be installed into the destination

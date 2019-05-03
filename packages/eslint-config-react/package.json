@@ -16,7 +16,7 @@
     "files": [
         "eslint-react.js"
     ],
-    "devDependencies": {
+    "dependencies": {
         "eslint-config-react": "^1.1.7",
         "eslint-plugin-jsx-a11y": "^6.2.1"
     }
