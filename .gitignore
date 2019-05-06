@@ -2,6 +2,8 @@
 
 # dependencies
 node_modules
+package-lock.json
+**/package-lock.json
 
 # build output
 dist
@@ -15,8 +17,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # IDE / Editor
-settings.json
-launch.json
+.vscode
 
 # misc
 .DS_Store

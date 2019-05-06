@@ -1,12 +1,13 @@
 {
-    "name": "@jagretz/web-configs",
+    "name": "@dominos-pulse/web-tooling-config",
     "description": "A monorepo of linter and formatter configurations for browser-based web projects",
     "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-tooling-config",
     "private": true,
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git@github.com:jagretz/web-configs.git"
+        "url": "git@github.com:jagretz/web-tooling-config.git"
     },
     "scripts": {
         "bootstrap": "lerna bootstrap --hoist",

@@ -65,7 +65,7 @@ async function checkForExistingGitDirectory() {
             errno: -4058,
             code: 'ENOENT',
             syscall: 'stat',
-            path: 'C:\\git\\web-configs\\packages\\web-configs-cli\\.git'
+            path: 'C:\\git\\web-tooling-config\\packages\\web-tooling-config-cli\\.git'
             */
             logger.error(
                 `Git not detected. Make sure to run this command from within a "clean" git directory.`

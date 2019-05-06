@@ -15,8 +15,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # IDE / Editor
-settings.json
-launch.json
+.vscode
 
 # misc
 .DS_Store
