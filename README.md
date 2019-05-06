@@ -2,7 +2,8 @@
 
 # web-tooling-config
 
-👀 Looking for the goods? You probably want the [cli](./web-configs-cli/README)
+👀 Looking for the API? You probably want the
+[cli](./web-tooling-config-cli/README)
 
 A monorepo of linter, formatter, and other tooling configurations intended for
 use in web projects: Projects built with javascript and css. Includes setup for

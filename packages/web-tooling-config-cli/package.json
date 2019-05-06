@@ -1,6 +1,6 @@
 {
-    "name": "@jagretz/web-configs-cli",
-    "version": "0.1.1-alpha.2",
+    "name": "@dominos-pulse/web-tooling-config-cli",
+    "version": "0.1.1-alpha.3",
     "publishConfig": {
         "access": "public"
     },
@@ -10,7 +10,7 @@
         "cli"
     ],
     "author": "jagretz <jagretz@gmail.com>",
-    "homepage": "https://github.com/jagretz/web-configs/packages/web-configs-cli#readme",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/web-tooling-config-cli",
     "bin": "cli.js",
     "files": [
         "cli.js",
