@@ -9,7 +9,7 @@
         "stylelint"
     ],
     "author": "jagretz <jagretz@gmail.com>",
-    "homepage": "https://github.com/jagretz/web-configs/packages/stylelint-config#readme",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/stylelint-config",
     "license": "MIT",
     "main": ".stylelintrc.js",
     "files": [
