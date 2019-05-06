@@ -10,7 +10,7 @@
         "react"
     ],
     "author": "jagretz <jagretz@gmail.com>",
-    "homepage": "https://github.com/jagretz/web-configs/packages/eslint-config-react#readme",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/eslint-config-react",
     "license": "MIT",
     "main": "eslint-react.js",
     "files": [

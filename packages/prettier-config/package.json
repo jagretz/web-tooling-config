@@ -9,7 +9,7 @@
         "prettier"
     ],
     "author": "jagretz <jagretz@gmail.com>",
-    "homepage": "https://github.com/jagretz/web-configs/packages/prettier-config#readme",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/prettier-config",
     "license": "MIT",
     "main": ".prettierrc.js",
     "files": [

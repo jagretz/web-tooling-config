@@ -9,7 +9,7 @@
         "editorconfig"
     ],
     "author": "jagretz <jagretz@gmail.com>",
-    "homepage": "https://github.com/jagretz/web-configspackages/editorconfig#readme",
+    "homepage": "https://github.com/jagretz/web-tooling-config/packages/editorconfig#readme",
     "license": "MIT",
     "main": ".editorconfig",
     "files": [
