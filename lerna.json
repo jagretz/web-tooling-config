@@ -1,0 +1,14 @@
+{
+    "version": "0.1.1-alpha.3",
+    "npmClient": "npm",
+    "packages": ["packages/*"],
+    "command": {
+        "publish": {
+            "ignoreChanges": ["ignored-file", "*.md"],
+            "registry": "https://artifacts.us.dominos.com/artifactory/api/npm/npm-ngp-snapshot/"
+        },
+        "bootstrap": {
+            "npmClientArgs": ["--no-package-lock"]
+        }
+    }
+}
