@@ -1,0 +1,18 @@
+{
+    "name": "@dominos-pulse/editorconfig",
+    "version": "0.1.1-alpha.3",
+    "publishConfig": {
+        "access": "public"
+    },
+    "description": "Editorconfig",
+    "keywords": [
+        "editorconfig"
+    ],
+    "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-tooling-config/packages/editorconfig#readme",
+    "license": "MIT",
+    "main": ".editorconfig",
+    "files": [
+        ".editorconfig"
+    ]
+}
