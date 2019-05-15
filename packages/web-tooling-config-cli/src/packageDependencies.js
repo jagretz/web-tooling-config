@@ -97,13 +97,23 @@ async function installPackageDependencies(projectType, packageDevDependencies) {
         packageDevDependencies
     );
 
+    logger.log(
+        "Spawning asynchronous npm process to install devDependencies:",
+        devDependenciesToInstall
+    );
+
     const responseCode = await safeSpawn(spawnNpmProcess.bind(null, devDependenciesToInstall));
 
     if (responseCode === 0) {
-        logger.success("Successfully installed package dependencies.");
+        logger.success("Successfully installed package dependencies.", devDependenciesToInstall);
     } else {
-        logger.error(`Failed to install package dependencies: ${devDependenciesToInstall}`);
+        logger.error(
+            "Failed to install the following one or more package dependencies:",
+            devDependenciesToInstall
+        );
     }
+
+    return responseCode;
 }
 
 /**
@@ -140,7 +150,6 @@ function leftOuterJoin(projectDependencies, packageJson) {
 function spawnNpmProcess(dependencies) {
     return spawn(
         process.platform === "win32" ? "npm.cmd" : "npm",
-        // destructure dependencies here
         ["install", "--save-dev", ...dependencies],
         {
             stdio: "inherit"

@@ -32,6 +32,5 @@ module.exports = {
     log: log(chalk.white),
     error: log(chalk.red),
     success: log(chalk.green),
-    warn: log(chalk.yellow),
-    attention: log(chalk.orange)
+    warn: log(chalk.yellow)
 };
