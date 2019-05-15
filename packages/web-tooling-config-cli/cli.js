@@ -40,6 +40,8 @@ const statPromise = promisify(fs.stat);
  */
 const execPromise = promisify(exec);
 
+/* eslint-disable consistent-return */
+// * eslint: We return on success, exit the program on error.
 /**
  * This will check the install directory for an existing `.git` directory. If
  * a `.git` directory does not exist, log an error and exit.
@@ -76,6 +78,7 @@ async function checkForExistingGitDirectory() {
         process.exit();
     }
 }
+/* eslint-enable consistent-return */
 
 async function checkForCleanGitDirectory() {
     try {
@@ -116,14 +119,15 @@ const longest = calculateLongestText([BROWSER, REACT, NODE]).length;
 
 /**
  * Return a function that will pad the start of a string with whitespace equal
- * to the length of the string + #longest less the length of the string
- * @param {integer} longest
+ * to the length of the string + targetLength ({@link longest}) less the
+ * length of the string
+ * @param {integer} targetLength
  * @returns {function} that pads the start of a string with whitespace.
  */
-function formatHint(longest) {
+function formatHint(targetLength) {
     /**
      * Pad the start of the `hint` with the whitespace equal to the length
-     * of the longest name minus the hint name.
+     * of the targetLength name minus the hint name.
      *
      * This allows a list of hints to be printed (output) with equal spacing
      * between the hint name and the hint itself. ie
@@ -135,7 +139,7 @@ function formatHint(longest) {
      */
 
     return (name, hint) => {
-        return `${hint.padStart(hint.length + longest - name.length)}`;
+        return `${hint.padStart(hint.length + targetLength - name.length)}`;
     };
 }
 
@@ -193,12 +197,9 @@ async function safeReadFile(filename) {
         return await readFile(filename);
     } catch (error) {
         if (error.code === "ENOENT") {
-            logger.warn(`No such file "${filename}". Skipping file.`);
-            return true;
-        } else {
-            logger.error(`Could not read file "${filename}"`);
-            throw error;
+            logger.error(`Could not read file. No such file "${filename}".`);
         }
+        throw error;
     }
 }
 
@@ -222,10 +223,10 @@ async function safeWriteFile(filename, ...rest) {
         if (error.code === "EEXIST") {
             logger.log(`${chalk.yellow("Skipped")} ${chalk.cyan(filename)} - File already exists.`);
             return true;
-        } else {
-            logger.error(`Could not write file "${filename}" to desitination `);
-            throw error;
         }
+
+        logger.error(`Could not write file "${filename}" to desitination.`);
+        throw error;
     }
 }
 
@@ -240,6 +241,7 @@ async function safeWriteFile(filename, ...rest) {
  */
 async function copyFiles(pathname, filenames) {
     return Promise.all(
+        // eslint-disable-next-line no-shadow
         filenames.map(async ({ source, destination }) => {
             logger.log(`Processing ${chalk.cyan(destination)}`);
 
@@ -285,7 +287,7 @@ async function createFiles(filenames) {
  * @async
  */
 async function getPackageJsonAsObject() {
-    let projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
+    const projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
     return JSON.parse(projectPackageJson);
 }
 
@@ -304,7 +306,7 @@ async function run() {
      * @return {object} the users selection (answer)
      */
     const project = await prompt(projectQuestions);
-    const type = project.type;
+    const { type } = project;
 
     /* Repeat users choice back to them. */
     logger.log(`Setting up project with the ${chalk.underline(type)} configs`);

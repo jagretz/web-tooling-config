@@ -1,23 +1,28 @@
 {
-  "name": "@jagretz/eslint-config-react",
-  "version": "0.1.1-snapshot.1557920106",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Eslint config for reactjs projects",
-  "keywords": [
-    "eslint",
-    "react"
-  ],
-  "author": "jagretz <jagretz@gmail.com>",
-  "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/eslint-config-react",
-  "license": "MIT",
-  "main": "eslint-react.js",
-  "files": [
-    "eslint-react.js"
-  ],
-  "dependencies": {
-    "eslint-config-react": "^1.1.7",
-    "eslint-plugin-jsx-a11y": "^6.2.1"
-  }
+    "name": "@jagretz/eslint-config-react",
+    "version": "0.1.1-snapshot.1557920106",
+    "publishConfig": {
+        "access": "public"
+    },
+    "description": "Eslint config for reactjs projects",
+    "keywords": [
+        "eslint",
+        "react"
+    ],
+    "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/eslint-config-react",
+    "license": "MIT",
+    "main": "eslint-react.js",
+    "files": [
+        "eslint-react.js"
+    ],
+    "peerDependencies": {
+        "@jagretz/eslint-config-base": "*",
+        "eslint": "^5.16.0",
+        "eslint-config-prettier": "^4.3.0",
+        "eslint-config-react": "^1.1.7",
+        "eslint-plugin-jsx-a11y": "^6.2.1",
+        "eslint-plugin-react": "^7.13.0",
+        "eslint-plugin-react-hooks": "^1.6.0"
+    }
 }
