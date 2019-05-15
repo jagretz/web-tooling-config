@@ -1,3 +1,6 @@
+/* eslint-disable no-use-before-define */
+// * eslint: This modules is a series of functions
+// * declarations that are declared before any use.
 /**
  * @module utils
  *
@@ -30,7 +33,7 @@ async function safeSpawn(spawnNpmProcess) {
         await spawnAsPromise(spawnNpmProcess);
         return 0;
     } catch (error) {
-        console.log("Error occured in safeSpawn:", error);
+        console.error("Error occured in safeSpawn:", error);
         return 1;
     }
 }
@@ -62,6 +65,8 @@ function spawnAsPromise(invokeProcess) {
             }
         });
         spawnedProcess.on("error", reject);
+    }).catch(error => {
+        throw error;
     });
 }
 

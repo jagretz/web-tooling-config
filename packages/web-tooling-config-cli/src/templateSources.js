@@ -38,7 +38,7 @@ const base = [
  */
 const styles = [
     { source: ".stylelintrc.js", destination: ".stylelintrc.js" },
-    { source: ".stylelintignore", destination: ".stylintignore" }
+    { source: ".stylelintignore", destination: ".stylelintignore" }
 ];
 
 /**
@@ -47,12 +47,7 @@ const styles = [
  * @prop {string} source name of the file to read
  * @prop {string} destination name of the file to write
  */
-const browser = [
-    { source: "eslint-base.js", destination: ".eslintrc.js" },
-    { source: ".stylelintrc.js", destination: ".stylelintrc.js" },
-    { source: ".stylintignore", destination: ".stylintignore" },
-    ...styles
-];
+const browser = [{ source: "eslint-base.js", destination: ".eslintrc.js" }, ...styles];
 
 /**
  * Files specific to react projects.

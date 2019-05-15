@@ -1,9 +1,6 @@
 module.exports = {
-    extends: [
-        "@jagretz/eslint-config-base",
-        "plugin:react/recommended",
-        "plugin:jsx-a11y/recommended"
-    ],
+    extends: ["plugin:react/recommended", "plugin:jsx-a11y/recommended", "prettier/react"],
+    plugins: ["react", "jsx-a11y", "react-hooks"],
     parserOptions: {
         ecmaFeatures: {
             jsx: true
@@ -15,6 +12,7 @@ module.exports = {
         }
     },
     rules: {
-        "react/jsx-filename-extension": ["error", { extensions: [".js"] }]
+        "react/jsx-filename-extension": ["error", { extensions: [".js"] }],
+        "react-hooks/rules-of-hooks": "error"
     }
 };

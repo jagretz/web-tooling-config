@@ -1,20 +1,7 @@
 module.exports = {
     extends: [
         "@jagretz/eslint-config-base",
-        "plugin:react/recommended",
-        "plugin:jsx-a11y/recommended"
-    ],
-    parserOptions: {
-        ecmaFeatures: {
-            jsx: true
-        }
-    },
-    settings: {
-        react: {
-            version: "detect"
-        }
-    },
-    rules: {
-        "react/jsx-filename-extension": ["error", { extensions: [".js"] }]
-    }
+        "@jagretz/eslint-config-react",
+        "./eslint-overrides.js"
+    ]
 };
