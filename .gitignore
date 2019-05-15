@@ -13,8 +13,7 @@ coverage
 
 # Tools / Tooling
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+lerna-debug.log*
 
 # IDE / Editor
 .vscode
