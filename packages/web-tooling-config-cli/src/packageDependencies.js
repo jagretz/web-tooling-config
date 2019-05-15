@@ -98,7 +98,7 @@ async function installPackageDependencies(projectType, packageDevDependencies) {
     );
 
     logger.log(
-        "Spawning asynchrouns npm process to install devDependencies:",
+        "Spawning asynchronous npm process to install devDependencies:",
         devDependenciesToInstall
     );
 
