@@ -358,7 +358,11 @@ async function run() {
     */
     await safeWriteFile("package.json", updatedPackageJson);
 
-    logger.success("Work Complete!");
+    if (responseCode === 0) {
+        logger.success("Completed successfully!");
+    } else {
+        logger.warn("Completed with problems.");
+    }
 }
 
 /* Invoke the script to start... */

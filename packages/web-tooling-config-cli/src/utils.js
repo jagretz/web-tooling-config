@@ -47,10 +47,10 @@ function spawnAsPromise(invokeProcess) {
     through a buffer and thrown as an `Error`.
     */
     return new Promise((resolve, reject) => {
-        const sp = invokeProcess();
+        const spawnedProcess = invokeProcess();
 
         /* code: { success: 0, error: 1 }  */
-        sp.on("close", code => {
+        spawnedProcess.on("close", code => {
             if (code === 0) {
                 resolve();
             } else {
@@ -61,7 +61,7 @@ function spawnAsPromise(invokeProcess) {
                 reject(error);
             }
         });
-        process.on("error", reject);
+        spawnedProcess.on("error", reject);
     });
 }
 
