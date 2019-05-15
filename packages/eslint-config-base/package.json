@@ -1,6 +1,6 @@
 {
     "name": "@dominos-pulse/eslint-config-base",
-    "version": "0.1.1-alpha.3",
+    "version": "0.1.1-snapshot.1557920106",
     "publishConfig": {
         "access": "public"
     },
