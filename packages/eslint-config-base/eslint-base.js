@@ -10,9 +10,12 @@ module.exports = {
     },
     // > To use experimental features not supported in ESLint itself yet.
     parser: "babel-eslint",
-    extends: ["eslint-config-airbnb"],
+    extends: ["airbnb-base", "prettier"],
+    // airbnb-base peerDep for eslint-plugin-import and we also want it.
+    plugins: ["import"],
     rules: {
-        "arrow-parens": "off",
+        "no-plusplus": 0,
+        "arrow-parens": 0,
         "constructor-super": 2,
         "no-cond-assign": 2,
         "no-control-regex": 2,
@@ -26,9 +29,12 @@ module.exports = {
         "no-undef": 2,
         "no-undefined": 2,
         "no-unreachable": 2,
-        "no-unused-vars": ["error", { args: "none" }],
+        "no-unused-vars": [
+            "error",
+            { args: "after-used", ignoreRestSiblings: true, caughtErrors: "all" }
+        ],
         "no-console": ["error", { allow: ["info", "warn", "error"] }],
         /* overrides applied by eslint-config-airbnb-base or it's peer dependencies */
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": 0
     }
 };

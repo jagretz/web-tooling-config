@@ -16,8 +16,13 @@
     "files": [
         "eslint-react.js"
     ],
-    "dependencies": {
+    "peerDependencies": {
+        "@dominos-pulse/eslint-config-base": "*",
+        "eslint": "^5.16.0",
+        "eslint-config-prettier": "^4.3.0",
         "eslint-config-react": "^1.1.7",
-        "eslint-plugin-jsx-a11y": "^6.2.1"
+        "eslint-plugin-jsx-a11y": "^6.2.1",
+        "eslint-plugin-react": "^7.13.0",
+        "eslint-plugin-react-hooks": "^1.6.0"
     }
 }
