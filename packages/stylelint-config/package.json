@@ -1,23 +1,23 @@
 {
-    "name": "@jagretz/stylelint-config",
-    "version": "0.1.1-snapshot.1557920106",
-    "publishConfig": {
-        "access": "public"
-    },
-    "description": "Base stylelint config",
-    "keywords": [
-        "stylelint"
-    ],
-    "author": "jagretz <jagretz@gmail.com>",
-    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/stylelint-config",
-    "license": "MIT",
-    "main": ".stylelintrc.js",
-    "files": [
-        ".stylelintrc.js",
-        ".stylelintignore"
-    ],
-    "dependencies": {
-        "stylelint-config-recommended-scss": "^3.3.0",
-        "stylelint-scss": "^3.6.0"
-    }
+  "name": "@jagretz/stylelint-config",
+  "version": "0.1.1-snapshot.1557920106",
+  "publishConfig": {
+    "access": "public"
+  },
+  "description": "Base stylelint config",
+  "keywords": [
+    "stylelint"
+  ],
+  "author": "jagretz <jagretz@gmail.com>",
+  "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/stylelint-config",
+  "license": "MIT",
+  "main": ".stylelintrc.js",
+  "files": [
+    ".stylelintrc.js",
+    ".stylelintignore"
+  ],
+  "dependencies": {
+    "stylelint-config-recommended-scss": "^3.3.0",
+    "stylelint-scss": "^3.6.0"
+  }
 }
