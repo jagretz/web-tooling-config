@@ -5,7 +5,7 @@
     "command": {
         "publish": {
             "ignoreChanges": ["ignored-file", "*.md"],
-            "registry": "https://artifacts.us.dominos.com/artifactory/api/npm/npm-ngp-snapshot/"
+            "registry": "https://registry.npmjs.org"
         },
         "bootstrap": {
             "npmClientArgs": ["--no-package-lock"]
