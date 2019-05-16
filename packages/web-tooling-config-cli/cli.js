@@ -280,6 +280,16 @@ async function createFiles(filenames) {
 }
 
 /**
+ * Asynchronously read, and synchronously parse the source projects (cwd) `package.json`
+ * @return {object} the parsed package.json
+ * @async
+ */
+async function getPackageJsonAsObject() {
+    let projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
+    return JSON.parse(projectPackageJson);
+}
+
+/**
  * Entry point of the CLI.
  * @async
  */
@@ -313,30 +323,46 @@ async function run() {
     logger.log("WIP: Gathering necessary package dependencies");
 
     // read the install locations package.json
-    const projectPackageJson = await safeReadFile(path.join(cwd, "package.json"));
+    let projectPackageJsonString = await getPackageJsonAsObject();
 
-    // TODO: 03/16 jagretz - can likely be abstracted as a separate step
-    // * this is the install step
-    const projectPackageJsonString = JSON.parse(projectPackageJson);
+    /*
+    Have a list a deps that are to be installed given the project.type: web, react, node, etx
+    You can temporarily comment out this line to save on testing time and
+    pointing to the correct registry (.npmrc )
+    */
+    const responseCode = await installPackageDependencies(
+        type,
+        projectPackageJsonString.devDependencies || {}
+    );
 
-    // Have a list a deps that are to be installed given the project.type: web, react, node, etx
-    // temp comment out to save on testing time and pointing to the correct registry (.npmrc )
-    await installPackageDependencies(type, projectPackageJsonString.devDependencies);
+    if (responseCode === 0) {
+        // get the most recent updates (after `npm install`)
+        projectPackageJsonString = await getPackageJsonAsObject();
+    }
 
-    // TODO: 03/16 jagretz - can likely be abstracted as a separate step
-    // * this is the overwrite `scripts` step
-    // overwrite scripts package.scripts. The git-diff can be used to "undo" changes
+    // Update scripts package.scripts.
     const scripts = {
-        ...projectPackageJsonString.scripts,
+        ...(projectPackageJsonString.scripts || {}),
         ...getScriptsByProjectType(type)
     };
-    const updatedPackageJson = JSON.stringify({ ...projectPackageJsonString, ...{ scripts } });
+    const updatedPackageJson = JSON.stringify(
+        { ...projectPackageJsonString, ...{ scripts } },
+        null,
+        4
+    );
 
-    // overwrite package.json... it's not _that_ large of a file so I am not
-    // too concerned about memory consumption or performance with this.
+    /*
+    Overwrite the package.json. It is not a large file so we aren't
+    too concerned about memory consumption or performance with this.
+    The git-diff can be used to "undo" undesired changes
+    */
     await safeWriteFile("package.json", updatedPackageJson);
 
-    logger.success("Work Complete!");
+    if (responseCode === 0) {
+        logger.success("Completed successfully!");
+    } else {
+        logger.warn("Completed with problems.");
+    }
 }
 
 /* Invoke the script to start... */

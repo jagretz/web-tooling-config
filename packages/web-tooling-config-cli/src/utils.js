@@ -47,16 +47,21 @@ function spawnAsPromise(invokeProcess) {
     through a buffer and thrown as an `Error`.
     */
     return new Promise((resolve, reject) => {
-        const sp = invokeProcess();
+        const spawnedProcess = invokeProcess();
 
         /* code: { success: 0, error: 1 }  */
-        sp.on("close", code => {
+        spawnedProcess.on("close", code => {
             if (code === 0) {
                 resolve();
+            } else {
+                const error = new Error(
+                    `Failed in promise wrapped spawn process with code: ${code}`
+                );
+                error.code = code;
+                reject(error);
             }
-            reject();
         });
-        process.on("error", reject);
+        spawnedProcess.on("error", reject);
     });
 }
 
