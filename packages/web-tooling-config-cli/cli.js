@@ -332,7 +332,7 @@ async function run() {
     */
     const responseCode = await installPackageDependencies(
         type,
-        projectPackageJsonString.devDependencies
+        projectPackageJsonString.devDependencies || {}
     );
 
     if (responseCode === 0) {
@@ -342,7 +342,7 @@ async function run() {
 
     // Update scripts package.scripts.
     const scripts = {
-        ...projectPackageJsonString.scripts,
+        ...(projectPackageJsonString.scripts || {}),
         ...getScriptsByProjectType(type)
     };
     const updatedPackageJson = JSON.stringify(
