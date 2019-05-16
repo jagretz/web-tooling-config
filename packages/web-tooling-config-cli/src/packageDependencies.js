@@ -78,10 +78,13 @@ const getDevDependenciesByProjectType = type => {
     switch (type) {
         case BROWSER:
             projectSpecificDependencies = browserProjectDependencies;
+            break;
         case REACT:
             projectSpecificDependencies = reactProjectDependencies;
+            break;
         case NODE:
             projectSpecificDependencies = nodeProjectDependencies;
+            break;
         default:
             projectSpecificDependencies = [];
     }
