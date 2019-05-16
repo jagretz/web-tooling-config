@@ -20,6 +20,8 @@ const projectDependencies = [
     "eslint",
     "babel-eslint",
     "@jagretz/eslint-config-base",
+    "eslint-config-airbnb",
+    "eslint-plugin-import",
     "prettier",
     "husky",
     "lint-staged"
@@ -66,18 +68,24 @@ const reactProjectDependencies = [
 const nodeProjectDependencies = [];
 
 /**
- *
+ * Return the dependencies that apply to a specific project type.
  * @param {string} type the project type matching
  * @returns {Array.<string>} array of strings representing the project
  * devDependencies that should be installed.
  */
 const getDevDependenciesByProjectType = type => {
-    return [
-        ...projectDependencies,
-        ...(type === NODE ? nodeProjectDependencies : []),
-        ...(type === BROWSER ? browserProjectDependencies : []),
-        ...(type === REACT ? reactProjectDependencies : [])
-    ];
+    let projectSpecificDependencies;
+    switch (type) {
+        case BROWSER:
+            projectSpecificDependencies = browserProjectDependencies;
+        case REACT:
+            projectSpecificDependencies = reactProjectDependencies;
+        case NODE:
+            projectSpecificDependencies = nodeProjectDependencies;
+        default:
+            projectSpecificDependencies = [];
+    }
+    return [...projectDependencies, ...projectSpecificDependencies];
 };
 
 /**
@@ -95,13 +103,23 @@ async function installPackageDependencies(projectType, packageDevDependencies) {
         packageDevDependencies
     );
 
+    logger.log(
+        "Spawning asynchronous npm process to install devDependencies:",
+        devDependenciesToInstall
+    );
+
     const responseCode = await safeSpawn(spawnNpmProcess.bind(null, devDependenciesToInstall));
 
     if (responseCode === 0) {
-        logger.success("Successfully installed package dependencies.");
+        logger.success("Successfully installed package dependencies.", devDependenciesToInstall);
     } else {
-        logger.error(`Failed to install package dependencies: ${devDependenciesToInstall}`);
+        logger.error(
+            "Failed to install the following one or more package dependencies:",
+            devDependenciesToInstall
+        );
     }
+
+    return responseCode;
 }
 
 /**
@@ -138,7 +156,6 @@ function leftOuterJoin(projectDependencies, packageJson) {
 function spawnNpmProcess(dependencies) {
     return spawn(
         process.platform === "win32" ? "npm.cmd" : "npm",
-        // destructure dependencies here
         ["install", "--save-dev", ...dependencies],
         {
             stdio: "inherit"
