@@ -19,7 +19,7 @@ const { BROWSER, REACT, NODE } = require("./projectTypes");
 const projectDependencies = [
     "eslint",
     "babel-eslint",
-    "@dominos-pulse/eslint-config-base",
+    "@jagretz/eslint-config-base",
     "eslint-config-airbnb",
     "eslint-plugin-import",
     "prettier",

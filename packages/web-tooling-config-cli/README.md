@@ -38,7 +38,7 @@ Great news! You don't need to install this library (locally or globally).
 Instead use `npx` to run the cli.
 
 ```bash
-npx @dominos-pulse/web-tooling-config-cli
+npx @jagretz/web-tooling-config-cli
 ```
 
 When the process spins up you have a very simple choice to make:
@@ -121,7 +121,7 @@ you name it. But in this example we use the same name, `.npmrc` and drop it
 under a custom directory.
 
 ```bash
-npx --userconfig C:/w/git/.npmrc  @dominos-pulse/web-tooling-config-cli
+npx --userconfig C:/w/git/.npmrc  @jagretz/web-tooling-config-cli
 ```
 
 ## Contributing

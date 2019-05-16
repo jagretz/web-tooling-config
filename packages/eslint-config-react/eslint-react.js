@@ -1,6 +1,6 @@
 module.exports = {
     extends: [
-        "@dominos-pulse/eslint-config-base",
+        "@jagretz/eslint-config-base",
         "plugin:react/recommended",
         "plugin:jsx-a11y/recommended"
     ],
