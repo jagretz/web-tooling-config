@@ -68,18 +68,27 @@ const reactProjectDependencies = [
 const nodeProjectDependencies = [];
 
 /**
- *
+ * Return the dependencies that apply to a specific project type.
  * @param {string} type the project type matching
  * @returns {Array.<string>} array of strings representing the project
  * devDependencies that should be installed.
  */
 const getDevDependenciesByProjectType = type => {
-    return [
-        ...projectDependencies,
-        ...(type === NODE ? nodeProjectDependencies : []),
-        ...(type === BROWSER ? browserProjectDependencies : []),
-        ...(type === REACT ? reactProjectDependencies : [])
-    ];
+    let projectSpecificDependencies;
+    switch (type) {
+        case BROWSER:
+            projectSpecificDependencies = browserProjectDependencies;
+            break;
+        case REACT:
+            projectSpecificDependencies = reactProjectDependencies;
+            break;
+        case NODE:
+            projectSpecificDependencies = nodeProjectDependencies;
+            break;
+        default:
+            projectSpecificDependencies = [];
+    }
+    return [...projectDependencies, ...projectSpecificDependencies];
 };
 
 /**
