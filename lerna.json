@@ -1,14 +1,21 @@
 {
-    "version": "0.1.1-snapshot.1557920106",
+    "version": "0.1.1-snapshot.1558454148",
     "npmClient": "npm",
-    "packages": ["packages/*"],
+    "packages": [
+        "packages/*"
+    ],
     "command": {
         "publish": {
-            "ignoreChanges": ["ignored-file", "*.md"],
+            "ignoreChanges": [
+                "ignored-file",
+                "*.md"
+            ],
             "registry": "https://artifacts.us.dominos.com/artifactory/api/npm/npm-ngp-snapshot/"
         },
         "bootstrap": {
-            "npmClientArgs": ["--no-package-lock"]
+            "npmClientArgs": [
+                "--no-package-lock"
+            ]
         }
     }
 }

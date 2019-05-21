@@ -1,6 +1,6 @@
 {
     "name": "@dominos-pulse/web-tooling-config-cli",
-    "version": "0.1.1-snapshot.1557920106",
+    "version": "0.1.1-snapshot.1558454148",
     "publishConfig": {
         "access": "public"
     },
