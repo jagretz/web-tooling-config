@@ -1,6 +1,6 @@
 {
     "name": "@dominos-pulse/prettier-config",
-    "version": "0.1.1-snapshot.1558454148",
+    "version": "0.1.1-snapshot.1558467775",
     "publishConfig": {
         "access": "public"
     },
