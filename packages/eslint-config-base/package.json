@@ -1,6 +1,6 @@
 {
     "name": "@dominos-pulse/eslint-config-base",
-    "version": "0.1.1-snapshot.1557920106",
+    "version": "0.1.1-snapshot.1558454148",
     "publishConfig": {
         "access": "public"
     },
@@ -15,5 +15,11 @@
     "files": [
         "eslint-base.js",
         ".eslintignore"
-    ]
+    ],
+    "peerDependencies": {
+        "eslint": "^5.16.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-config-prettier": "^4.3.0",
+        "eslint-plugin-import": "^2.17.2"
+    }
 }

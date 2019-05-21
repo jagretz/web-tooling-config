@@ -1,3 +1,6 @@
+/* eslint-disable no-use-before-define */
+// * eslint: This modules is a series of functions
+// * declarations that are declared before any use.
 /**
  * @module packageSources
  *
@@ -20,8 +23,6 @@ const projectDependencies = [
     "eslint",
     "babel-eslint",
     "@dominos-pulse/eslint-config-base",
-    "eslint-config-airbnb",
-    "eslint-plugin-import",
     "prettier",
     "husky",
     "lint-staged"
@@ -54,8 +55,7 @@ const browserProjectDependencies = [...stylesProjectDependencies];
  * @type {Array.<string>}
  */
 const reactProjectDependencies = [
-    "eslint-plugin-react",
-    "eslint-plugin-jsx-a11y",
+    "@dominos-pulse/eslint-config-react",
     ...stylesProjectDependencies
 ];
 
@@ -111,35 +111,38 @@ async function installPackageDependencies(projectType, packageDevDependencies) {
         devDependenciesToInstall
     );
 
-    const responseCode = await safeSpawn(spawnNpmProcess.bind(null, devDependenciesToInstall));
-
-    if (responseCode === 0) {
-        logger.success("Successfully installed package dependencies.", devDependenciesToInstall);
-    } else {
+    let responseCode;
+    try {
+        responseCode = await safeSpawn(spawnNpmProcess.bind(null, devDependenciesToInstall));
+    } catch (error) {
         logger.error(
             "Failed to install the following one or more package dependencies:",
             devDependenciesToInstall
         );
+        logger.error(error);
     }
 
+    if (responseCode === 0) {
+        logger.success("Successfully installed package dependencies.", devDependenciesToInstall);
+    }
     return responseCode;
 }
 
 /**
  * Take only packages in the left that do not exist in the right; the left difference.
  *
- * @param {Array.<string>} projectDependencies prospective dependencies
+ * @param {Array.<string>} packageDependencies prospective dependencies
  * @param {Array.<object>} packageJson same structure as a `package.json`s
  * `devDependencies` structure. ie { "name-of-package" : "^0.1.0" }
  * @returns {Array.<string>} array of string names for the dependencies.
  */
-function leftOuterJoin(projectDependencies, packageJson) {
+function leftOuterJoin(packageDependencies, packageJson) {
     // return the devDeps to be installed ONLY if they don't already
     // exist in the destination projects devDeps.
 
     // perf is not a big deal here considering how few items we are
     // looping through, however, performance improvements can be future feature 👍
-    return projectDependencies.reduce((accum, curr) => {
+    return packageDependencies.reduce((accum, curr) => {
         if (Reflect.has(packageJson, curr)) {
             return accum;
         }
