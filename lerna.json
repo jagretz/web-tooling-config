@@ -1,5 +1,5 @@
 {
-    "version": "0.1.1-snapshot.1558454148",
+    "version": "0.1.1-snapshot.1558467775",
     "npmClient": "npm",
     "packages": ["packages/*"],
     "command": {
