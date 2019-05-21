@@ -23,7 +23,7 @@ const overridesFiles = ["eslint-overrides.js", "stylelint-overides.js"];
  * `eslint-base` and `eslint-react` both combine into `.eslintrc`.
  */
 const base = [
-    { source: ".gitignore", destination: ".gitignore" },
+    { source: "gitignore", destination: ".gitignore" },
     { source: ".editorconfig", destination: ".editorconfig" },
     { source: ".prettierrc.js", destination: ".prettierrc.js" },
     { source: ".prettierignore", destination: ".prettierignore" },
