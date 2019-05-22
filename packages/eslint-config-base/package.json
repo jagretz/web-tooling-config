@@ -1,19 +1,25 @@
 {
-  "name": "@jagretz/eslint-config-base",
-  "version": "0.1.1-snapshot.1557920106",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Base eslint config",
-  "keywords": [
-    "eslint"
-  ],
-  "author": "jagretz <jagretz@gmail.com>",
-  "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/eslint-config-base",
-  "license": "MIT",
-  "main": "eslint-base.js",
-  "files": [
-    "eslint-base.js",
-    ".eslintignore"
-  ]
+    "name": "@jagretz/eslint-config-base",
+    "version": "0.1.1-snapshot.1558467775",
+    "publishConfig": {
+        "access": "public"
+    },
+    "description": "Base eslint config",
+    "keywords": [
+        "eslint"
+    ],
+    "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/eslint-config-base",
+    "license": "MIT",
+    "main": "eslint-base.js",
+    "files": [
+        "eslint-base.js",
+        ".eslintignore"
+    ],
+    "peerDependencies": {
+        "eslint": "^5.16.0",
+        "eslint-config-airbnb-base": "^13.1.0",
+        "eslint-config-prettier": "^4.3.0",
+        "eslint-plugin-import": "^2.17.2"
+    }
 }
