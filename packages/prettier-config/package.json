@@ -15,5 +15,8 @@
     "files": [
         ".prettierrc.js",
         ".prettierignore"
-    ]
+    ],
+    "dependencies": {
+        "prettier": "^1.17.1"
+    }
 }
