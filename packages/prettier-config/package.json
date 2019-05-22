@@ -1,19 +1,19 @@
 {
-  "name": "@jagretz/prettier-config",
-  "version": "0.1.1-snapshot.1557920106",
-  "publishConfig": {
-    "access": "public"
-  },
-  "description": "Prettier config for code formatting",
-  "keywords": [
-    "prettier"
-  ],
-  "author": "jagretz <jagretz@gmail.com>",
-  "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/prettier-config",
-  "license": "MIT",
-  "main": ".prettierrc.js",
-  "files": [
-    ".prettierrc.js",
-    ".prettierignore"
-  ]
+    "name": "@jagretz/prettier-config",
+    "version": "0.1.1-snapshot.1558467775",
+    "publishConfig": {
+        "access": "public"
+    },
+    "description": "Prettier config for code formatting",
+    "keywords": [
+        "prettier"
+    ],
+    "author": "jagretz <jagretz@gmail.com>",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/prettier-config",
+    "license": "MIT",
+    "main": ".prettierrc.js",
+    "files": [
+        ".prettierrc.js",
+        ".prettierignore"
+    ]
 }
