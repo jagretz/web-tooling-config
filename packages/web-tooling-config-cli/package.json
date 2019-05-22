@@ -1,6 +1,6 @@
 {
     "name": "@jagretz/web-tooling-config-cli",
-    "version": "0.1.1-snapshot.1558467775",
+    "version": "0.1.1-snapshot.1558538033",
     "publishConfig": {
         "access": "public"
     },
