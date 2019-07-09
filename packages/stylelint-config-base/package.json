@@ -1,5 +1,5 @@
 {
-    "name": "@jagretz/stylelint-config",
+    "name": "@jagretz/stylelint-config-base",
     "version": "0.1.1-snapshot.1562714366",
     "publishConfig": {
         "access": "public"
@@ -10,7 +10,7 @@
         "scss"
     ],
     "author": "jagretz <jagretz@gmail.com>",
-    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/stylelint-config",
+    "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/stylelint-config-base",
     "license": "MIT",
     "main": "index.js",
     "files": [
