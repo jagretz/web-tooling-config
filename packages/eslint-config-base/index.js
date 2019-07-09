@@ -14,10 +14,11 @@ module.exports = {
     // airbnb-base peerDep for eslint-plugin-import and we also want it.
     plugins: ["import"],
     rules: {
-        "no-plusplus": 0,
         "arrow-parens": 0,
         "constructor-super": 2,
+        curly: [2, "all"],
         "no-cond-assign": 2,
+        "no-console": ["error", { allow: ["info", "warn", "error"] }],
         "no-control-regex": 2,
         "no-dupe-args": 2,
         "no-dupe-keys": 2,
@@ -25,6 +26,7 @@ module.exports = {
         "no-extra-boolean-cast": 1,
         "no-invalid-regexp": 2,
         "no-loop-func": 1,
+        "no-plusplus": 0,
         "no-redeclare": 2,
         "no-undef": 2,
         "no-undefined": 2,
@@ -33,7 +35,6 @@ module.exports = {
             "error",
             { args: "after-used", ignoreRestSiblings: true, caughtErrors: "all" }
         ],
-        "no-console": ["error", { allow: ["info", "warn", "error"] }],
         /* overrides applied by eslint-config-airbnb-base or it's peer dependencies */
         "import/prefer-default-export": 0
     }
