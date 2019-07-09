@@ -10,9 +10,9 @@ module.exports = {
     },
     // > To use experimental features not supported in ESLint itself yet.
     parser: "babel-eslint",
-    extends: ["airbnb-base", "prettier"],
+    extends: ["airbnb-base", "plugin:jsdoc/recommended", "prettier"],
     // airbnb-base peerDep for eslint-plugin-import and we also want it.
-    plugins: ["import"],
+    plugins: ["import", "jsdoc"],
     rules: {
         "arrow-parens": 0,
         "constructor-super": 2,
@@ -35,7 +35,20 @@ module.exports = {
             "error",
             { args: "after-used", ignoreRestSiblings: true, caughtErrors: "all" }
         ],
-        /* overrides applied by eslint-config-airbnb-base or it's peer dependencies */
-        "import/prefer-default-export": 0
+        /* override rules applied by eslint-config-airbnb-base or its peer dependencies */
+        "import/prefer-default-export": 0,
+        /*
+        override rules applied by eslint-plugin-jsdoc
+        */
+        // This is an unnecessary check which does not affect the jsdoc.
+        "jsdoc/newline-after-description": 0,
+        // Allow custom types without the need for explicit type declaration imports.
+        "jsdoc/no-undefined-types": 0,
+        // This rule is too stringent to be applied to all functions.
+        "jsdoc/require-jsdoc": 0,
+        // Allows us to use Object and object interchangable... among others.
+        "jsdoc/check-types": 0,
+        // Similar to check-types and also applies to tags.
+        "jsdoc/valid-types": 0
     }
 };
