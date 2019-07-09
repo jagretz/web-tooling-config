@@ -9,7 +9,7 @@ const { BROWSER, REACT, NODE } = require("./projectTypes");
 /**
  * @type {array<string>} names of the "overrides" configuration files.
  */
-const overridesFiles = ["eslint-overrides.js", "stylelint-overides.js"];
+const overridesFiles = ["eslint-overrides.js", "stylelint-overrides.js"];
 
 /**
  * Files applicable to any environment and project.

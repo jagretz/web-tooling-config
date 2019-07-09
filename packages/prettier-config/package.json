@@ -1,6 +1,6 @@
 {
     "name": "@jagretz/prettier-config",
-    "version": "0.1.1-snapshot.1558538033",
+    "version": "0.1.1-snapshot.1562715443",
     "publishConfig": {
         "access": "public"
     },
@@ -11,9 +11,9 @@
     "author": "jagretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/prettier-config",
     "license": "MIT",
-    "main": ".prettierrc.js",
+    "main": "index.js",
     "files": [
-        ".prettierrc.js",
+        "index.js",
         ".prettierignore"
     ],
     "dependencies": {
