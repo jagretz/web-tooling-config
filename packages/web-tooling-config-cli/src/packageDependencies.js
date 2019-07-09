@@ -20,8 +20,11 @@ const { BROWSER, REACT, NODE } = require("./projectTypes");
  * @type {Array.<string>}
  */
 const projectDependencies = [
-    "eslint",
-    "babel-eslint",
+    // TODO: 06/04/19 jagretz - Install the following dependency(s) _only if_ they are not found
+    // in the node_modules dependency tree -- this would assume the dependency(s) were installed
+    // by another module, and is not necessarily required to install with this package:
+    // ["eslint"] for projectDependencies,
+    // ["stylelint"] for stylesProjectDependencies
     "@jagretz/eslint-config-base",
     "prettier",
     "husky",
@@ -34,11 +37,7 @@ const projectDependencies = [
  *
  * @type {Array.<string>}
  */
-const stylesProjectDependencies = [
-    "stylelint",
-    "stylelint-config-recommended-scss",
-    "stylelint-scss"
-];
+const stylesProjectDependencies = ["@jagretz/stylelint-config-base"];
 
 /**
  * `package.devDependencies` that are to be installed into the destination
@@ -75,10 +74,13 @@ const getDevDependenciesByProjectType = type => {
     switch (type) {
         case BROWSER:
             projectSpecificDependencies = browserProjectDependencies;
+            break;
         case REACT:
             projectSpecificDependencies = reactProjectDependencies;
+            break;
         case NODE:
             projectSpecificDependencies = nodeProjectDependencies;
+            break;
         default:
             projectSpecificDependencies = [];
     }
