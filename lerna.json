@@ -1,14 +1,17 @@
 {
-    "version": "0.1.1-snapshot.1558538033",
+    "version": "0.1.1-snapshot.1562715443",
     "npmClient": "npm",
-    "packages": ["packages/*"],
+    "packages": [
+        "packages/*"
+    ],
     "command": {
         "publish": {
-            "ignoreChanges": ["ignored-file", "*.md"],
             "registry": "https://registry.npmjs.org"
         },
         "bootstrap": {
-            "npmClientArgs": ["--no-package-lock"]
+            "npmClientArgs": [
+                "--no-package-lock"
+            ]
         }
     }
 }

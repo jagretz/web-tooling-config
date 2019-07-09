@@ -3,131 +3,109 @@ Configure and install common project dependencies.
 # web-tooling-config-cli
 
 - [web-tooling-config-cli](#web-tooling-config-cli)
-  - [What and Why](#what-and-why)
-  - [Use / Install](#use--install)
-    - [Customizations and Overrides](#customizations-and-overrides)
-    - [Updating Existing Projects](#updating-existing-projects)
-  - [What gets Installed](#what-gets-installed)
-  - [Troubleshooting](#troubleshooting)
-    - [Registry](#registry)
-  - [Contributing](#contributing)
-  - [License](#license)
+  - [Use](#Use)
+    - [Updating Existing Projects](#Updating-Existing-Projects)
+    - [Customizations and Overrides](#Customizations-and-Overrides)
+  - [What gets Installed](#What-gets-Installed)
+  - [Contributing](#Contributing)
+  - [License](#License)
 
-## What and Why
+This is a CLI tool that when run, will modify the projects linting and
+formatting configuration for specific tooling, as well as install project
+dependencies the configurations rely on.
 
-This library will setup your project with a set of tooling configurations,
-package scripts, and installs any missing package dependencies.
+## Use
 
-The configurations provided are intended to be used as is but does also provide
-you a way to [override](#customizations-and-overrides) any undesired settings.
-
-**Why?**
-
-There are a lot of opinions, suggestions, and other bikeshedding around project
-configurations, linter settings and format settings. Why fuss over something so
-trivial to final project?
-
-Instead of worrying about 2-space indentation over tabs, `.*` extensions, or
-whether the linter should throw an error if someone forgets to add a new line
-between functions. This cli sets up all that for you with a set of sensible
-defaults.
-
-## Use / Install
-
-Great news! You don't need to install this library (locally or globally).
-Instead use `npx` to run the cli.
+Running
 
 ```bash
 npx @jagretz/web-tooling-config-cli
 ```
 
-When the process spins up you have a very simple choice to make:
+starts the CLI. When the process spins up you are prompted for the project
+"type" to configure.
 
+```bash
 > what type of project do you want to configure?
 >
-> - browser
-> - react
-> - node
+> - browser?
+> - react?
+> - node?
+```
 
-Make your selection and the rest is history.
+Once a selection is made, the tool will add or modify existing tooling
+configurations.
 
-**But don't Change "x"!**
+**Undoing Changes**
 
-If you don't want all the changes provided by this library that is OK.
+Running the CLI requires a clean git working directory. This feature allows
+changes to be reverted and diffed with little effort on the part of the user.
 
-The cli requires a clean git working directory. This allows you to easily pick
-or undo changes made by this tool that you might not want added to your project.
+**Notes**
+
+The CLI will only run on [clean](https://git-scm.com/docs/git-clean) working
+directories tracked by git.
+
+This CLI may add or modify new and existing tooling configurations.
+
+### Updating Existing Projects
+
+Simply re-run the [CLI](#use). It will update existing configurations, but will
+leave any `*-overrides` files untouched. This allows your customizations to be
+retained on any subsequent updates.
 
 ### Customizations and Overrides
 
 This package is intended to use "as is"; an out-of-the-box solution to
-configuring your project with common dependencies. Therefore, it isn't intended
-for any particular project to modify default configurations directly.
+configuring your project with defaults. The configurations provided are not
+intended to be modified directly.
 
-However, if the need arises, the default set of configurations provide an
-`*-overrides` file for overriding linter configurations. Both an
-`eslint-overrides.js` and a `stylelint-overrides.js` are provided for your use
-and customization
+However, there may be circumstances that require modification to the provided
+defaults. Therefore an outlet is provided through `*-overrides` files for
+overriding linter configurations.
 
-### Updating Existing Projects
+Both an `eslint-overrides.js` and a `stylelint-overrides.js` are provided for
+your use and customizations.
 
-Simply re-run the [cli](#use). It will override everything but `*-overrides`
-files. This allows your customizations to be retained on any subsequent updates.
+`*-overrides` files are not modified during subsequent updates.
 
 ## What gets Installed
 
-The CLI will configure your project with as one of three types:
+The CLI will configure a project for one of the following environments:
 
 1. Browser
-2. React
+2. Browser - React
 3. Node
 
-**For all projects:**
+Every environment type will generate a set of configurations which may include
+configurations for the following tools:
 
-- eslint
+- editorconfig
 - prettier
-- lint-staged
-
-**Browser-specific**
-
-Everything from "all projects" along with:
-
+- eslint
 - stylelint
+- lint-staged
+- .gitignore
 
-**React-specific**
+Every environment type will also install a corresponding set of dependencies:
 
-Everything from "browser-specific" along with:
+| Dependency  | Browser | Browser - React | Node |
+| :---------- | :-----: | :-------------: | :--: |
+| eslint      |   ✔️    |       ✔️        |  ✔️  |
+| prettier    |   ✔️    |       ✔️        |  ✔️  |
+| lint-staged |   ✔️    |       ✔️        |  ✔️  |
+| stylelint   |   ✔️    |       ✔️        |  ❌  |
 
-- react-specific eslint plugins
-
-**Node-specific**
-
-Everything from "all projects" along with:
-
-- eslint settings for node environments
-
-## Troubleshooting
-
-### Registry
-
-If most of your downloads are hosted on a registry that isn't `npm`, you may
-have to create a separate `.npmrc`. Most of the time you can just manage your
-registry (or have your dev-ops team) to download and host this package. However,
-in cases where you can't, you may run into issue. Here is the solution.
-
-Create a `.npmrc` file that points to the npm registry. Then when invoking npx,
-point to that `.npmrc`. It doesn't matter where you put this file or even what
-you name it. But in this example we use the same name, `.npmrc` and drop it
-under a custom directory.
-
-```bash
-npx --userconfig C:/w/git/.npmrc  @jagretz/web-tooling-config-cli
-```
+`eslint` and `stylelint` are marked as `peerDependencies` and should be
+installed outside of this tool if your project requires them.
 
 ## Contributing
 
-More on this later. For now, either create an issue explaining the feature and
-why.
+Feel welcome to create an issue explaining the feature and how it would benefit
+the project.
+
+If you are already a maintainer or looking to lend a helping hand, checkout the
+[Development Guide](../../DEVELOPMENT.md) at the project root.
 
 ## License
 
