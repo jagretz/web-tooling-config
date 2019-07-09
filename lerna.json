@@ -4,7 +4,6 @@
     "packages": ["packages/*"],
     "command": {
         "publish": {
-            "ignoreChanges": ["ignored-file", "*.md"],
             "registry": "https://registry.npmjs.org"
         },
         "bootstrap": {
