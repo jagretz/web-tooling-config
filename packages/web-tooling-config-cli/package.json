@@ -15,6 +15,10 @@
         "type": "git",
         "url": "https://github.com/jagretz/web-tooling-config/tree/master/packages/web-tooling-config-cli"
     },
+    "engines": {
+        "node": ">= 8.4",
+        "npm": ">= 5.2"
+    },
     "bin": "cli.js",
     "files": [
         "cli.js",
@@ -25,6 +29,11 @@
         "test": "echo \"Error: run tests from root\" && exit 1",
         "eslint": "eslint ./",
         "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
     },
     "devDependencies": {
         "eslint": "^5.16.0",
