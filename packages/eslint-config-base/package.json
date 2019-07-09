@@ -1,6 +1,6 @@
 {
     "name": "@jagretz/eslint-config-base",
-    "version": "0.1.1-snapshot.1558538033",
+    "version": "0.1.1-snapshot.1562714366",
     "publishConfig": {
         "access": "public"
     },
