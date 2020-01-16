@@ -9,7 +9,7 @@
         "stylelint",
         "scss"
     ],
-    "author": "jagretz <jagretz@gmail.com>",
+    "author": "jason gretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/stylelint-config-base",
     "license": "MIT",
     "main": "index.js",

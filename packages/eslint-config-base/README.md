@@ -1,8 +1,16 @@
-Simple, sensible eslint configuration.
+Configuration for javascript projects.
 
 # eslint-config-base
 
-Disregards any setting that touch code format (format is up to you).
+Disregards _\*most_ linter settings that touch code format.
+
+\* = Linters are intended to catch problem areas in a codebase. Occasionally,
+formatting lint rules are added which do not change the affect of the code, but
+may cause confusion for new developers and frustration for more experienced
+developers.
+
+Not all formatting rules provided by linters are disabaled, but this configuration
+does limit the number of formatting rules that do come enabled.
 
 **Dependencies**
 

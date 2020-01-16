@@ -20,7 +20,6 @@ const { BROWSER, REACT, NODE } = require("./projectTypes");
  * @type {Array.<string>}
  */
 const projectDependencies = [
-    // TODO: 06/04/19 jagretz - Install the following dependency(s) _only if_ they are not found
     // in the node_modules dependency tree -- this would assume the dependency(s) were installed
     // by another module, and is not necessarily required to install with this package:
     // ["eslint"] for projectDependencies,
