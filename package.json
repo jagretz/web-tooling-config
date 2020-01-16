@@ -1,7 +1,7 @@
 {
     "name": "@jagretz/web-tooling-config",
     "description": "A monorepo of linter and formatter configurations for browser-based web projects",
-    "author": "jagretz <jagretz@gmail.com>",
+    "author": "jason gretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-tooling-config",
     "private": true,
     "license": "MIT",
@@ -10,7 +10,7 @@
         "url": "git@github.com:jagretz/web-tooling-config.git"
     },
     "scripts": {
-        "bootstrap": "lerna bootstrap --hoist",
+        "bootstrap": "lerna bootstrap",
         "eslint": "eslint ./",
         "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
     },

@@ -1,8 +1,6 @@
-Simple, sensible stylelint configuration.
+Configuration for projects that use CSS and/or SCSS/SASS.
 
 # stylelint-config
-
-Includes settings for CSS and SCSS.
 
 **Dependencies**
 

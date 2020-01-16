@@ -9,13 +9,12 @@
         "eslint",
         "react"
     ],
-    "author": "jagretz <jagretz@gmail.com>",
+    "author": "jason gretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/eslint-config-react",
     "license": "MIT",
     "main": "index.js",
     "files": [
-        "index.js",
-        ".eslintignore"
+        "index.js"
     ],
     "peerDependencies": {
         "eslint": "4.x - 5.x"

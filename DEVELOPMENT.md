@@ -3,12 +3,11 @@
 This project is maintained with [lerna](https://github.com/lerna/lerna) 🐉.
 Lerna is used to manage child packages, versioning, and releases.
 
-- [Development Guide](#Development-Guide)
-  - [Install](#Install)
-  - [Development](#Development)
-    - [Adding new features](#Adding-new-features)
-  - [Tooling](#Tooling)
-  - [Versioning and Publishing](#Versioning-and-Publishing)
+- [Development Guide](#development-guide)
+  - [Install](#install)
+  - [Development](#development)
+  - [Tooling](#tooling)
+  - [Versioning and Publishing](#versioning-and-publishing)
 
 This project manages package configurations for the following tooling:
 
@@ -23,6 +22,9 @@ Additionally, a `.gitignore` configuration is included as part of the
 
 ## Install
 
+Note, if you don't already you will need to have `lerna` installed globally:
+`npm install -g lerna`.
+
 1. Clone the repo
    ```bash
    # pulls down the entire monorepo
@@ -33,7 +35,8 @@ Additionally, a `.gitignore` configuration is included as part of the
    # from the root package ./web-toolin-config
    npm install
    ```
-3. Install sub-package dependencies
+3. Install children package dependencies
+
    ```bash
    # from the root package ./web-toolin-config
    lerna bootstrap
@@ -41,22 +44,23 @@ Additionally, a `.gitignore` configuration is included as part of the
 
 ## Development
 
-The `web-tooling-config-cli` sub-package is the CLI. Any features related to the
-CLI should be added here.
+The `web-tooling-config-cli` package is the CLI. Any features related to the CLI
+should be added here.
 
-Other sub-packages contain the configurationss for specific tools such as
-`eslint`, `stylelint`, and `editorconfig` (to name just a few).
+Other packages (under `./packages`) contain the configurationss for specific
+tools such as `eslint`, `stylelint`, and `editorconfig` (to name just a few).
 
-When new dependencies are added to any sub-package, run `lerna bootstrap` from
-the project monorepo root to install and symlink all local package dependencies.
+When new dependencies are added to any package, run `lerna bootstrap` from the
+project monorepo root to install and
+[symlink](https://en.wikipedia.org/wiki/Symbolic_link) all local package
+dependencies.
 
-### Adding new features
+The tools configurations are primarily static files. The CLI
+`packages/web-tooling-config-cli/cli.js` is where the development happens.
 
-Navigate to the [`./packages`](./tree/master/packages) directory for a list of
-all sub-packages managed by this monorepo.
-
-Outside of tooling configuration files, the CLI `web-tooling-config-cli` is
-where most of the development will be handled.
+Read the
+[CLI development guide](./tree/master/packages/web-tooling-config-cli/DEVELOPMENT.md)
+for instructions on testing and debugging.
 
 ## Tooling
 
@@ -64,8 +68,8 @@ Git `pre-commit` hooks runs on every commit. This is enabled thanks to
 [husky](https://github.com/typicode/husky) 🐶 and
 [`lint-staged`](https://github.com/okonet/lint-staged)
 
-There is no build step currently so the client gets the non-minified,
-non-obfuscated code to allow easier understanding and customization of the code.
+There is no build step so the client will get the non-minified, non-obfuscated
+code.
 
 ## Versioning and Publishing
 
@@ -74,7 +78,7 @@ Versioning and publishing are handled at the monorepo root.
 We follow the [semantic versioning](https://semver.org/) specification.
 
 `lerna` supplies a collection of CLI options to help automate working with
-multiple sub-packages.
+multiple packages.
 
 Below are instructions for manually running commands sequentially. More
 automated options are available for advanced use.
@@ -94,7 +98,7 @@ echo 0.1.1-snapshot.$(date +%s)
 2. Update package Versions
 
 Versions of all packages are kept in-sync. Any update will increment the version
-of all sub-packages.
+of all packages.
 
 Running the following command to update ALL packages:
 
