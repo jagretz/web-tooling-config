@@ -9,8 +9,8 @@ formatting lint rules are added which do not change the affect of the code, but
 may cause confusion for new developers and frustration for more experienced
 developers.
 
-Not all formatting rules provided by linters are disabaled, but this configuration
-does limit the number of formatting rules that do come enabled.
+Not all formatting rules provided by linters are disabaled, but this
+configuration does limit the number of formatting rules that do come enabled.
 
 **Dependencies**
 

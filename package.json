@@ -11,7 +11,7 @@
     },
     "scripts": {
         "bootstrap": "lerna bootstrap",
-        "eslint": "eslint ./",
+        "eslint": "eslint --cache ./",
         "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
     },
     "devDependencies": {
