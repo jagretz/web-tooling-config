@@ -84,10 +84,16 @@ async function checkForCleanGitDirectory() {
     try {
         const { stdout, stderr } = await execPromise("git status --porcelain");
         if (!!stdout || !!stderr) {
-            logger.error(
-                `Git directory not clean. Please remove or commit changes before continuing.`
-            );
-            process.exit();
+            const { question } = await prompt({
+                type: "confirm",
+                name: "question",
+                initial: "yes",
+                message: "Git directory not clean. Continue anyway? (yes)"
+            });
+
+            if (!question) {
+                process.exit();
+            }
         }
     } catch (error) {
         console.error("Problem detected:\n", error);
