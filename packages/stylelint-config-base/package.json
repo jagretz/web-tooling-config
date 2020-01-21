@@ -18,10 +18,10 @@
         ".stylelintignore"
     ],
     "peerDependencies": {
-        "stylelint": "8.x - 10.x"
+        "stylelint": "10.x - 13.x"
     },
     "dependencies": {
-        "stylelint-config-recommended-scss": "^3.3.0",
-        "stylelint-scss": "^3.6.0"
+        "stylelint-config-recommended-scss": "^4.1.0",
+        "stylelint-scss": "^3.13.0"
     }
 }

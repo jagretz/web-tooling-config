@@ -3,7 +3,6 @@
         "npm run eslint --"
     ],
     "*.{js,jsx,css,scss,html,json,md,mdx}": [
-        "npm run prettier -- ",
-        "git add"
+        "npm run prettier -- "
     ]
 }

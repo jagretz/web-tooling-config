@@ -1,7 +1,7 @@
 /**
  * @module projectTypes
  *
- * @desc Exports the available project configuration types.
+ * @description Exports the available project configuration types.
  */
 
 module.exports = {

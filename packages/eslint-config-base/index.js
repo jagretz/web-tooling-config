@@ -10,6 +10,13 @@ module.exports = {
         ecmaVersion: 9,
         sourceType: "module"
     },
+    settings: {
+        jsdoc: {
+            preferredTypes: {
+                object: "Object"
+            }
+        }
+    },
     // babel-eslint allows the use of experimental features not supported by eslint.
     parser: "babel-eslint",
     extends: ["airbnb-base", "plugin:jsdoc/recommended", "prettier"],

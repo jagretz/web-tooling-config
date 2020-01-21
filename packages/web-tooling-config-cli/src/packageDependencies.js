@@ -4,7 +4,7 @@
 /**
  * @module packageSources
  *
- * @desc Exports utils useful in constructing the `package.json`.
+ * @description Exports utils useful in constructing the `package.json`.
  */
 
 /** @see [child_process]{@link https://nodejs.org/api/child_process.html#child_process_child_process} */
@@ -24,6 +24,7 @@ const projectDependencies = [
     // by another module, and is not necessarily required to install with this package:
     // ["eslint"] for projectDependencies,
     // ["stylelint"] for stylesProjectDependencies
+    "eslint",
     "@jagretz/eslint-config-base",
     "prettier",
     "husky",
@@ -36,7 +37,7 @@ const projectDependencies = [
  *
  * @type {Array.<string>}
  */
-const stylesProjectDependencies = ["@jagretz/stylelint-config-base"];
+const stylesProjectDependencies = ["stylelint", "@jagretz/stylelint-config-base"];
 
 /**
  * `package.devDependencies` that are to be installed into the destination
@@ -90,7 +91,7 @@ const getDevDependenciesByProjectType = type => {
  * Installs package dependencies that are not already included in the package.json
  * of the target package.
  *
- * @param {string} projectType
+ * @param {string} projectType string name of the project type
  * @param {object} packageDevDependencies same structure as a `package.json`s
  * `devDependencies` structure. ie { "name-of-package" : "^0.1.0" }
  */

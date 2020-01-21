@@ -1,7 +1,7 @@
 /**
  * @module sources
  *
- * @desc Exports configuration source file names and associated meta-data.
+ * @description Exports configuration source file names and associated meta-data.
  */
 
 const { BROWSER, REACT, NODE } = require("./projectTypes");
@@ -15,8 +15,8 @@ const overridesFiles = ["eslint-overrides.js", "stylelint-overrides.js"];
  * Files applicable to any environment and project.
  *
  * Each element is a structure with:
- * @prop {string} source name of the file to read
- * @prop {string} destination name of the file to write
+ * @property {string} source name of the file to read
+ * @property {string} destination name of the file to write
  *
  * This structure helps to distinguish between configs that may have the same
  * destination, but a different name for the source. eg.
@@ -33,8 +33,8 @@ const base = [
 /**
  * Files specific to environments that desire css.
  * @type {Array.<Object>}
- * @prop {string} source name of the file to read
- * @prop {string} destination name of the file to write
+ * @property {string} source name of the file to read
+ * @property {string} destination name of the file to write
  */
 const styles = [
     { source: ".stylelintrc.js", destination: ".stylelintrc.js" },
@@ -44,30 +44,30 @@ const styles = [
 /**
  * Files specific to browser environments.
  * @type {Array.<Object>}
- * @prop {string} source name of the file to read
- * @prop {string} destination name of the file to write
+ * @property {string} source name of the file to read
+ * @property {string} destination name of the file to write
  */
 const browser = [{ source: "eslint-base.js", destination: ".eslintrc.js" }, ...styles];
 
 /**
  * Files specific to react projects.
  * @type {Array.<Object>}
- * @prop {string} source name of the file to read
- * @prop {string} destination name of the file to write
+ * @property {string} source name of the file to read
+ * @property {string} destination name of the file to write
  */
 const react = [{ source: "eslint-react.js", destination: ".eslintrc.js" }, ...styles];
 
 /**
  * Files specific to node environments.
  * @type {Array.<Object>}
- * @prop {string} source name of the file to read
- * @prop {string} destination name of the file to write
+ * @property {string} source name of the file to read
+ * @property {string} destination name of the file to write
  */
 const node = [{ source: "eslint-base.js", destination: ".eslintrc.js" }];
 
 /**
  * Return a collection of sources based upon the passed #type.
- * @param {string} type
+ * @param {string} type string name of the type of project
  * @returns {Array.<Object>} array of k,v pairs mapping the filename to copy
  * (the source), and the copy-to filename (destination)
  */
