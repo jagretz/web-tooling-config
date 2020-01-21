@@ -1,6 +1,6 @@
 {
     "name": "@jagretz/stylelint-config-base",
-    "version": "0.1.1-snapshot.1562715443",
+    "version": "0.2.0-snapshot.0",
     "publishConfig": {
         "access": "public"
     },
