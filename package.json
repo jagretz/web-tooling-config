@@ -16,8 +16,21 @@
     },
     "devDependencies": {
         "babel-eslint": "^10.0.1",
-        "eslint": "^5.16.0",
+        "eslint": "^6.8.0",
+        "eslint-config-airbnb-base": "^14.0.0",
+        "eslint-config-prettier": "^6.9.0",
+        "eslint-plugin-import": "^2.20.0",
+        "husky": "^4.0.10",
         "lerna": "^3.13.4",
+        "lint-staged": "^10.0.0",
         "prettier": "^1.17.0"
+    },
+    "dependencies": {
+        "@jagretz/editorconfig": "file:packages/editorconfig",
+        "@jagretz/eslint-config-base": "file:packages/eslint-config-base",
+        "@jagretz/eslint-config-react": "file:packages/eslint-config-react",
+        "@jagretz/prettier-config": "file:packages/prettier-config",
+        "@jagretz/stylelint-config-base": "file:packages/stylelint-config-base",
+        "@jagretz/web-tooling-config-cli": "file:packages/web-tooling-config-cli"
     }
 }
