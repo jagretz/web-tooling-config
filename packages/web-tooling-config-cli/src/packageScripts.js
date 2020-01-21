@@ -1,7 +1,7 @@
 /**
  * @module packageScripts
  *
- * @desc Exports utilities useful in constructing the `scripts` property
+ * @description Exports utilities useful in constructing the `scripts` property
  * of `package.json`.
  */
 
@@ -11,7 +11,7 @@ const { NODE } = require("./projectTypes");
  * `package.scripts` common to any javascript project.
  */
 const scripts = {
-    eslint: "eslint ./",
+    eslint: "eslint ./ --fix --cache",
     prettier: 'prettier --write "./**/*.{js,jsx,css,scss,html,json,md,mdx}"'
 };
 

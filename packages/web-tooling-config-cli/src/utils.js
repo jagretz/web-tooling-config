@@ -4,7 +4,7 @@
 /**
  * @module utils
  *
- * @desc Exports general use-case utilities for the cli and all modules.
+ * @description Exports general use-case utilities for the cli and all modules.
  */
 
 /*
@@ -23,7 +23,7 @@ be displayed as messages are emitted (received).
  * Wraps `spawn` with async/await, returning a success or error integer similar
  * to the error codes returned by other ChildProcess.
  *
- * @param {ChildProcess} spawnNpmProcess
+ * @param {ChildProcess} spawnNpmProcess the npm process to start
  * @returns {number} `0` indicating a success or `1` indicating that there was
  * an error the ChildProcess could not handle.
  * @async
@@ -40,7 +40,9 @@ async function safeSpawn(spawnNpmProcess) {
 
 /**
  * Wraps `spawn` in a `Promise`.
+ *
  * @returns {Promise} wrapping `spawn`.
+ * @param {Function} invokeProcess a process to start.
  */
 function spawnAsPromise(invokeProcess) {
     /*

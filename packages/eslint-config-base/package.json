@@ -17,13 +17,13 @@
         ".eslintignore"
     ],
     "peerDependencies": {
-        "eslint": "4.x - 5.x"
+        "eslint": "5.x - 6.x"
     },
     "dependencies": {
-        "babel-eslint": "9.x - 10.x",
-        "eslint-config-airbnb-base": "^13.1.0",
-        "eslint-config-prettier": "^4.3.0",
-        "eslint-plugin-import": "^2.17.2",
-        "eslint-plugin-jsdoc": "^15.3.2"
+        "babel-eslint": "^10.0.3",
+        "eslint-config-airbnb-base": "^14.0.0",
+        "eslint-config-prettier": "^6.9.0",
+        "eslint-plugin-import": "^2.20.0",
+        "eslint-plugin-jsdoc": "^20.3.1"
     }
 }

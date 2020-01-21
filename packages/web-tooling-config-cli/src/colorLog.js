@@ -1,7 +1,7 @@
 /**
  * @module colorLog
  *
- * @desc adds some style to your consoles log statements!
+ * @description adds some style to your consoles log statements!
  */
 
 const chalk = require("chalk");
@@ -11,7 +11,7 @@ const path = require("path");
  * Delegates to the `console.log` after formatting and colorizing the message.
  *
  * @param {func} colorizer - a color method on `chalk`. ie `chalk.red`
- * @param {...} rest - values to log to the console
+ * @returns {Function} that accepts areguments to delegate to {@link console.log}
  */
 const log = colorizer => (...rest) =>
     console.log(
@@ -19,7 +19,7 @@ const log = colorizer => (...rest) =>
         ...rest
             /**
              * @param {string} message the message to colorize
-             * @return {string} formatted message
+             * @returns {string} formatted message
              */
             .map(message =>
                 typeof message === "string" && path.isAbsolute(message)

@@ -41,7 +41,7 @@ const statPromise = promisify(fs.stat);
 const execPromise = promisify(exec);
 
 /* eslint-disable consistent-return */
-// * eslint: We return on success, exit the program on error.
+// We disable this eslint rule because: We return on success, and exit the program on error.
 /**
  * This will check the install directory for an existing `.git` directory. If
  * a `.git` directory does not exist, log an error and exit.
@@ -58,7 +58,7 @@ const execPromise = promisify(exec);
  */
 async function checkForExistingGitDirectory() {
     try {
-        return await statPromise(path.join(cwd, ".git"));
+        return !!(await statPromise(path.join(cwd, ".git")));
     } catch (error) {
         if (error.code === "ENOENT" && error.path.endsWith(".git")) {
             /*
@@ -69,35 +69,47 @@ async function checkForExistingGitDirectory() {
             syscall: 'stat',
             path: 'C:\\git\\web-tooling-config\\packages\\web-tooling-config-cli\\.git'
             */
-            logger.error(
-                `Git not detected. Make sure to run this command from within a "clean" git directory.`
-            );
-        } else {
-            console.error("Problem detected:\n", error);
-        }
-        process.exit();
-    }
-}
-/* eslint-enable consistent-return */
 
-async function checkForCleanGitDirectory() {
-    try {
-        const { stdout, stderr } = await execPromise("git status --porcelain");
-        if (!!stdout || !!stderr) {
             const { question } = await prompt({
                 type: "confirm",
                 name: "question",
                 initial: "yes",
-                message: "Git directory not clean. Continue anyway? (yes)"
+                message: "We did not recognize this project as git repository. Continue anyway?"
             });
 
             if (!question) {
                 process.exit();
             }
+
+            // false to indicate to the caller this dir does not contain a .git directory
+            return false;
         }
-    } catch (error) {
-        console.error("Problem detected:\n", error);
+        console.error("An unknown problem occured:\n", error);
         process.exit();
+    }
+}
+/* eslint-enable consistent-return */
+
+async function checkForCleanGitDirectory(isGitProject) {
+    if (isGitProject) {
+        try {
+            const { stdout, stderr } = await execPromise("git status --porcelain");
+            if (!!stdout || !!stderr) {
+                const { question } = await prompt({
+                    type: "confirm",
+                    name: "question",
+                    initial: "yes",
+                    message: "Git directory not clean. Continue anyway?"
+                });
+
+                if (!question) {
+                    process.exit();
+                }
+            }
+        } catch (error) {
+            console.error("Problem detected:\n", error);
+            process.exit();
+        }
     }
 }
 
@@ -111,7 +123,7 @@ function welcomeMessage() {
 /**
  * Compare and return the longest string in a array.
  * @param {array<string>} texts array of strings to compare lengths of
- * @return {string} the string value of the longest given string
+ * @returns {string} the string value of the longest given string
  */
 const calculateLongestText = texts =>
     Object.values(texts).reduce((longest, current) =>
@@ -127,7 +139,9 @@ const longest = calculateLongestText([BROWSER, REACT, NODE]).length;
  * Return a function that will pad the start of a string with whitespace equal
  * to the length of the string + targetLength ({@link longest}) less the
  * length of the string
- * @param {integer} targetLength
+ *
+ * @param {integer} targetLength the length of target element used to figure out how much
+ * padding to add to the hint.
  * @returns {function} that pads the start of a string with whitespace.
  */
 function formatHint(targetLength) {
@@ -183,7 +197,7 @@ const projectQuestions = {
 
 /**
  * @param {string} filename string name of the file.
- * @return {string} fully-qualified destination
+ * @returns {string} fully-qualified destination
  */
 const destination = filename => path.join(cwd, filename);
 
@@ -194,7 +208,7 @@ const destination = filename => path.join(cwd, filename);
  * On Error, logs and re-throws.
  *
  * @param {string} filename the name of the file to read.
- * @returns {Promise}
+ * @returns {Promise} that resolves to the return from {@link readFile}
  * @throws {Error} failure to read the file.
  * @async
  */
@@ -218,7 +232,8 @@ async function safeReadFile(filename) {
  * with the same name if one already exists.
  *
  * @param {string} filename the name of the file to write new or overwrite.
- * @returns {Promise}
+ * @param {*[]} rest The rest of the arguments to feed into {@link writeFile}
+ * @returns {Promise} that resolves to the return from {@link writeFile}
  * @throws {Error} failure to write the file.
  * @async
  */
@@ -267,7 +282,7 @@ const fileContents = "module.exports = {}";
  * Logs the result of the operation to stdout.
  *
  * @param {Array<String>} filenames names of the files to create (write).
- * @returns {Promise}
+ * @returns {Promise} that resolves to the result from {@link writeFile}
  * @async
  */
 async function createFiles(filenames) {
@@ -289,7 +304,7 @@ async function createFiles(filenames) {
 
 /**
  * Asynchronously read, and synchronously parse the source projects (cwd) `package.json`
- * @return {object} the parsed package.json
+ * @returns {object} the parsed package.json
  * @async
  */
 async function getPackageJsonAsObject() {
@@ -302,14 +317,14 @@ async function getPackageJsonAsObject() {
  * @async
  */
 async function run() {
-    await checkForExistingGitDirectory();
-    await checkForCleanGitDirectory();
+    const isGitProject = await checkForExistingGitDirectory();
+    await checkForCleanGitDirectory(isGitProject);
 
     welcomeMessage();
 
     /**
      * Prompt the user for the target project type.
-     * @return {object} the users selection (answer)
+     * @returns {object} the users selection (answer)
      */
     const project = await prompt(projectQuestions);
     const { type } = project;

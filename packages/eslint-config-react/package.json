@@ -17,13 +17,13 @@
         "index.js"
     ],
     "peerDependencies": {
-        "eslint": "4.x - 5.x"
+        "eslint": "5.x - 6.x"
     },
     "dependencies": {
         "@jagretz/eslint-config-base": "*",
         "eslint-config-react": "^1.1.7",
-        "eslint-plugin-jsx-a11y": "^6.2.1",
-        "eslint-plugin-react": "^7.13.0",
-        "eslint-plugin-react-hooks": "^1.6.0"
+        "eslint-plugin-jsx-a11y": "^6.2.3",
+        "eslint-plugin-react": "^7.18.0",
+        "eslint-plugin-react-hooks": "^2.3.0"
     }
 }

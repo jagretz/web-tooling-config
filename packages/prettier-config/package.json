@@ -17,6 +17,6 @@
         ".prettierignore"
     ],
     "dependencies": {
-        "prettier": "^1.17.1"
+        "prettier": "^1.19.1"
     }
 }
