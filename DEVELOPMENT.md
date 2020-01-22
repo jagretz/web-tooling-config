@@ -1,3 +1,5 @@
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
+
 # Development Guide
 
 This project is maintained with [lerna](https://github.com/lerna/lerna) 🐉.
@@ -22,25 +24,20 @@ Additionally, a `.gitignore` configuration is included as part of the
 
 ## Install
 
-Note, if you don't already you will need to have `lerna` installed globally:
-`npm install -g lerna`.
-
 1. Clone the repo
    ```bash
    # pulls down the entire monorepo
-   git clone <this_package>
+   git clone git@github.com:jagretz/web-tooling-config.git
    ```
 2. Install root (monorepo) dependencies
    ```bash
    # from the root package ./web-toolin-config
    npm install
    ```
-3. Install children package dependencies
 
-   ```bash
-   # from the root package ./web-toolin-config
-   lerna bootstrap
-   ```
+Side note: the documentation suggests running `lerna install` and
+`lerna bootstrap` but this isn't necessary. See
+[comment](https://github.com/lerna/lerna/issues/2391#issuecomment-569343564)
 
 ## Development
 

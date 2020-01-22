@@ -5,7 +5,7 @@
 This README contains instructions on running the CLI. This is a monorepo that
 uses the [lerna](https://github.com/lerna/lerna) monorepo management utility.
 
-This is a CLI tool that when run, will modify the projects linting and
+This project contains a CLI that when ran, will modify the projects linting and
 formatting configuration for specific tooling, as well as install project
 depenedencies the configurations rely on.
 
@@ -18,7 +18,7 @@ depenedencies the configurations rely on.
 ## Usage
 
 _This should be run against a Javascript project (i.e. contains a valid
-`package.json`), and assumes the use of git for version control._
+`package.json`)._
 
 Running
 
