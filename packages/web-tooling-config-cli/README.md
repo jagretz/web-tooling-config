@@ -3,16 +3,12 @@ Configure and install common project dependencies.
 # web-tooling-config-cli
 
 - [web-tooling-config-cli](#web-tooling-config-cli)
-  - [Use](#Use)
-    - [Updating Existing Projects](#Updating-Existing-Projects)
-    - [Customizations and Overrides](#Customizations-and-Overrides)
-  - [What gets Installed](#What-gets-Installed)
-  - [Contributing](#Contributing)
-  - [License](#License)
-
-This is a CLI tool that when run, will modify the projects linting and
-formatting configuration for specific tooling, as well as install project
-dependencies the configurations rely on.
+  - [Use](#use)
+    - [Updating Existing Projects](#updating-existing-projects)
+    - [Customizations and Overrides](#customizations-and-overrides)
+  - [What gets Installed](#what-gets-installed)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Use
 
