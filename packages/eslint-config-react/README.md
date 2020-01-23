@@ -1,4 +1,4 @@
-Simple, sensible eslint configuration for react.
+Configuration for react.js projects.
 
 # eslint-config-react
 

@@ -1,15 +1,15 @@
 {
     "name": "@jagretz/web-tooling-config-cli",
-    "version": "0.1.1-snapshot.1562715443",
+    "version": "0.2.0-snapshot.0",
     "publishConfig": {
         "access": "public"
     },
     "license": "MIT",
-    "description": "CLI for web configs: linters, formatters",
+    "description": "CLI for web tooling configurations: linters, formatters, etc",
     "keywords": [
         "cli"
     ],
-    "author": "jagretz <jagretz@gmail.com>",
+    "author": "jason gretz <jagretz@gmail.com>",
     "homepage": "https://github.com/jagretz/web-tooling-config/tree/master/packages/web-tooling-config-cli",
     "repository": {
         "type": "git",
@@ -25,27 +25,19 @@
         "src",
         "templates"
     ],
-    "scripts": {
-        "test": "echo \"Error: run tests from root\" && exit 1",
-        "eslint": "eslint ./",
-        "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
-    },
     "husky": {
         "hooks": {
             "pre-commit": "lint-staged"
         }
     },
-    "devDependencies": {
-        "eslint": "^5.16.0",
-        "eslint-config-airbnb-base": "^13.1.0",
-        "eslint-config-prettier": "^4.3.0",
-        "eslint-plugin-import": "^2.17.2",
-        "husky": "^2.3.0",
-        "lint-staged": "^8.1.7"
+    "scripts": {
+        "test": "echo \"Error: run tests from root\" && exit 1",
+        "eslint": "eslint --cache ./",
+        "prettier": "prettier --write \"./**/*.{js,jsx,css,scss,html,json,md,mdx}\""
     },
     "dependencies": {
-        "chalk": "^2.4.2",
-        "enquirer": "^2.3.0",
+        "chalk": "^3.0.0",
+        "enquirer": "^2.3.4",
         "shell.js": "^3.1.0"
     }
 }

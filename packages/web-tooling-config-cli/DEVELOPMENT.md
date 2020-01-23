@@ -5,9 +5,9 @@ A development guide intended for contributors and forks of the project.
 The project root includes information for
 [versioning and publishing](../../DEVELOPMENT.md) features.
 
-- [Development](#Development)
-  - [Testing](#Testing)
-  - [Debugging](#Debugging)
+- [Development](#development)
+  - [Testing](#testing)
+  - [Debugging](#debugging)
 
 ## Testing
 
@@ -35,7 +35,8 @@ node C:/w/git/web-tooling-config/packages/web-tooling-config-cli/cli
 **Test Remotely**
 
 If you can publish the package to a either a local running instance or a private
-registry, you can also publish snapshots and pull from said registry.
+registry, you can also publish snapshot versions (not for production use) and
+pull from the registry.
 
 _Ensure your `.npmrc` is pointing to the correct registry._
 

@@ -1,6 +1,8 @@
 /**
- * All formatting rRule should be managed by prettier. We turn off multiple eslint rules
- * in order to remove conflicts with prettier rules.
+ * All formatting rules should be managed by prettier, NOT a linter. Therefore,
+ * multiple eslint rules are turned off in order to remove conflicts with prettier rules.
+ * This is accomplished primarily with eslint-config-prettier and secondly through
+ * manual rule setting.
  */
 module.exports = {
     env: { es6: true, browser: true, node: true, jest: true },
@@ -8,7 +10,14 @@ module.exports = {
         ecmaVersion: 9,
         sourceType: "module"
     },
-    // > To use experimental features not supported in ESLint itself yet.
+    settings: {
+        jsdoc: {
+            preferredTypes: {
+                object: "Object"
+            }
+        }
+    },
+    // babel-eslint allows the use of experimental features not supported by eslint.
     parser: "babel-eslint",
     extends: ["airbnb-base", "plugin:jsdoc/recommended", "prettier"],
     // airbnb-base peerDep for eslint-plugin-import and we also want it.
@@ -37,10 +46,8 @@ module.exports = {
         ],
         /* override rules applied by eslint-config-airbnb-base or its peer dependencies */
         "import/prefer-default-export": 0,
-        /*
-        override rules applied by eslint-plugin-jsdoc
-        */
-        // This is an unnecessary check which does not affect the jsdoc.
+        /* override rules applied by eslint-plugin-jsdoc or its peer dependencies */
+        // This rule only affects formatting.
         "jsdoc/newline-after-description": 0,
         // Allow custom types without the need for explicit type declaration imports.
         "jsdoc/no-undefined-types": 0,
@@ -48,7 +55,7 @@ module.exports = {
         "jsdoc/require-jsdoc": 0,
         // Allows us to use Object and object interchangable... among others.
         "jsdoc/check-types": 0,
-        // Similar to check-types and also applies to tags.
+        // Similar to the check-types rule but applies to tags.
         "jsdoc/valid-types": 0
     }
 };
